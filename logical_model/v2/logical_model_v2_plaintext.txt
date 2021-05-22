@@ -1,0 +1,98 @@
+Franchise (id, start_date, end_date, name, address, neg_price)
+	Pk: id
+
+Individual_store (id, start_date, end_date, name, address, neg_price, franchise)
+	Pk: id
+
+Team_skier (id, start_date, end_date, name, dob, club, num_skis)
+	Pk: id
+
+Places_order (customer_id, order_id, storekeeper_id)
+	Pk: customer_id, order_id, storekeeper_id
+	Fk: customer_id REFERENCES Customer(id)
+	Fk: order_id REFERENCES Order(order_nr)
+	Fk: storekeeper_id REFERENCES Storekeeper(nor)
+
+Shipment(nr, name, address, pickup_date, company_name, driver_id, state_id)
+	Pk: nr
+	Fk: state_id REFERENCES Shipment_state(id)
+
+Shipment_state(id, state)
+	Pk: id
+
+Transporters(company_name)
+	Pk: company_name
+
+Shipment_transporters(shipment_id, company_name)
+	Pk: shipment_id, company_name
+	Fk: shipment_id REFERENCES Shipment(nr)
+	Fk: company_name REFERENCES Transporters(company_name)
+
+Order(order_nr, ski_type, quantity, parent_id, shipment_id, state_id)
+	Pk: order_nr
+	Fk: parent_id REFERENCES Order(order_nr)
+	Fk: shipment_id REFERENCES Shipment(nr)
+	Fk: state_id REFERENCES Order_state (id)
+
+Order_state(id, state)
+	Pk: id
+
+Order_history(order_id, history_id, employee, state)
+	Pk: order_id, history_id
+	Fk: order_id REFERENCES Order(order_nr)Order_details(order_id, model, quantity)
+	Pk: order_id, model
+	Fk : order_id REFERENCES Order(order_nr)
+
+Ski( product_no, url, msrpp, photo, historical, order_id, model_id, grip_id, type_id, temp_id, weight_id, size_id)
+	Pk: product_no
+	Fk: order_id REFERENCES Order(order_nr)
+	Fk: model_id REFERENCES Ski_model(model_id)
+	Fk: grip_id REFERENCES Grip_system(grip_id)
+	Fk: type_id REFERENCES Ski_type(type_id)
+	Fk: temp_id REFERENCES Ski_temperature(temp_id)
+	Fk: weight_id REFERENCES Weight_class(id)
+	Fk: size_id REFERENCES Size_class(id)
+
+Ski_model(model_id, name)
+	Pk: model_id
+
+Grip_system(grip_id, name)
+	Pk: grip_id
+
+Ski_type(type_id, name)
+	Pk: type_id
+
+Ski_temperature(temp_id, temperature)
+	Pk: temp_id
+
+Weight_class(id, min_weight, max_weight)
+	Pk: id
+
+Size_class(id, size)
+	Pk: id
+
+Ski_production_plan(plan_id, product_no)
+	Pk: plan_id, product_no
+	Fk: plan_id REFERENCES Production_plan(nr)
+	Fk: product_no REFERENCES ski(production_no)
+
+Ski_plan(plan_id, model, amount)
+	Pk: plan_id, model
+	Fk: plan_id REFERENCES Production_plan(nr)
+
+Production_plan(nr, num_skis_total, start_date, end_date, production_planner_id)
+	Pk: nr
+	Fk: production_planner_id REFERENCES Production_planner(nr)
+
+Production_planner(nr, name, position)
+	Pk: nr
+
+Storekeeper(nr, name, position)
+	Pk: nr
+
+Customer_rep(nr, name, position)
+	Pk: nr
+
+Customer( id, start_date, end_date, employee_nr)
+	Pk: id
+	Fk: employee_nr REFERENCES customer_rep(nr)
