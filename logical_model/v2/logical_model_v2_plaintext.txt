@@ -37,11 +37,13 @@ Order(order_nr, ski_type, quantity, parent_id, shipment_id, state_id)
 Order_state(id, state)
 	Pk: id
 
-Order_history(order_id, history_id, employee, state)
-	Pk: order_id, history_id
-	Fk: order_id REFERENCES Order(order_nr)Order_details(order_id, model, quantity)
-	Pk: order_id, model
-	Fk : order_id REFERENCES Order(order_nr)
+Order_history(order_nr, history_id, employee, state)
+	Pk: order_nr, history_id
+	Fk: order_nr REFERENCES Order(order_nr)
+
+Order_details(order_nr, model, quantity)
+	Pk: order_nr, model
+	Fk : order_nr REFERENCES Order(order_nr)
 
 Ski( product_no, url, msrpp, photo, historical, order_id, model_id, grip_id, type_id, temp_id, weight_id, size_id)
 	Pk: product_no
