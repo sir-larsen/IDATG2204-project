@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '969a8c58d873040904566f109189a239ee760886',
+    'reference' => 'f852b4f6aaa59ad3c55f8aaf2a0b82bc3f7dfee7',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,16 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '969a8c58d873040904566f109189a239ee760886',
-    ),
-    'defuse/php-encryption' => 
-    array (
-      'pretty_version' => 'v2.3.1',
-      'version' => '2.3.1.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '77880488b9954b7884c25555c2a0ea9e7053f9d2',
+      'reference' => 'f852b4f6aaa59ad3c55f8aaf2a0b82bc3f7dfee7',
     ),
     'graham-campbell/result-type' => 
     array (
@@ -37,15 +28,6 @@
       array (
       ),
       'reference' => '7e279d2cd5d7fbb156ce46daada972355cea27bb',
-    ),
-    'paragonie/random_compat' => 
-    array (
-      'pretty_version' => 'v9.99.100',
-      'version' => '9.99.100.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '996434e5492cb4c3edcb9168db6fbb1359ef965a',
     ),
     'phpoption/phpoption' => 
     array (

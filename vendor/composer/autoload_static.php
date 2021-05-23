@@ -30,7 +30,6 @@ class ComposerStaticInit046d7a4c299f60575050cb7f5520883e
         'D' => 
         array (
             'Dotenv\\' => 7,
-            'Defuse\\Crypto\\' => 14,
         ),
     );
 
@@ -58,10 +57,6 @@ class ComposerStaticInit046d7a4c299f60575050cb7f5520883e
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
-        ),
-        'Defuse\\Crypto\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
         ),
     );
 
