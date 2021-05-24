@@ -1,0 +1,59 @@
+INSERT INTO `employee` (`nr`, `name`, `position`)
+VALUES (1, 'Maximiliano Zakarias', 1);
+
+INSERT INTO `employee` (`nr`, `name`, `position`)
+VALUES (NULL, 'Rånny Enkelmann', 2);
+
+INSERT INTO `employee` (`nr`, `name`, `position`)
+VALUES (NULL, 'Kåre Catalan', 3);
+
+INSERT INTO `employee_position` (`id`, `position`)
+VALUES (2, 'storekeeper');
+
+INSERT INTO `employee_position` (`id`, `position`)
+VALUES (3, 'production_planner');
+
+INSERT INTO franchise (id, start_date, end_date, name, address, neg_price)
+VALUES (1, '2020-01-01', '2021-01-01', 'XXL', 'Storgata 5', 45000);
+
+INSERT INTO franchise (id, start_date, end_date, name, address, neg_price)
+VALUES (NULL, '2020-01-01', '2021-01-01', 'Sport1', 'Storgata 20', 500000);
+
+INSERT INTO grip_system (grip_id, name)
+VALUES(1, wax),
+      (2, IntelliGrip);
+
+INSERT INTO individual_store (id, start_date, end_date, name, address, neg_price, franchise)
+VALUES (1, '2020-01-01', '2021-01-01', 'XXL Stavanger', 'Kornblomstveien 8', 45000, 'XXL'),
+	   (2, '2020-02-02', '2021-02-02', 'Birkelands Sport', 'Hageveien5', 32000, NULL);
+
+
+INSERT INTO orders (order_nr, ski_model, quantity, parent_id, shipment_id, state_id)
+VALUES (1, ) -- IKKE FERDIG ELLER LAGT INN
+
+INSERT INTO orders (order_nr, ski_model, quantity, state_id, parent_id)
+VALUES (1, 2, 400, 1, NULL);
+
+INSERT INTO orders (order_nr, ski_model, quantity, state_id, parent_id)
+VALUES (2, 4, 265, 2, NULL),
+(3, 6, 800, 2, NULL),
+(4, 1, 345, 2, NULL),
+(5, 3, 175, 2, 2);
+
+INSERT INTO ski_model (model_id, name)
+VALUES (1, 'Active'),
+(2, 'Active Pro'),
+(3, 'Endurance'),
+(4, 'Intrasonic'),
+(5, 'Race Pro'),
+(6, 'Race Speed'),
+(7, 'Redline');
+
+INSERT INTO shipment_state (id, state)
+VALUES (1, 'ready'),
+(2, 'picked up');
+
+INSERT INTO customer (id, start_date, end_date, customer_rep)
+
+INSERT INTO shipment (nr, address, pickup_date, company_name, driver_id, state_id, order_id)
+VALUES (1, )

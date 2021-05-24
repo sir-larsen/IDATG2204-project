@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 22. Mai, 2021 22:37 PM
+-- Generation Time: 24. Mai, 2021 22:05 PM
 -- Tjener-versjon: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -24,14 +24,88 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellstruktur for tabell `address`
+--
+
+CREATE TABLE `address` (
+  `id` int(11) NOT NULL,
+  `address` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `address`
+--
+
+INSERT INTO `address` (`id`, `address`) VALUES
+(1, 'Brugata 5 4027 Stavanger'),
+(2, 'Fisegata 3 4026 Stavanger'),
+(3, 'Rumpeveien 12 2815 Gjøvik'),
+(4, 'Markus Zakarias Prompevei 7 5000 Bærum');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `customer`
+--
+
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `customer_rep` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `customer`
+--
+
+INSERT INTO `customer` (`id`, `start_date`, `end_date`, `customer_rep`) VALUES
+(1, '2020-01-01', '2021-01-01', 1),
+(2, '2020-02-02', '2021-02-02', 1),
+(3, '2019-01-01', '2020-01-01', 1),
+(4, '2017-01-01', '2021-01-01', 1),
+(5, '2018-04-27', '2021-02-14', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellstruktur for tabell `employee`
 --
 
 CREATE TABLE `employee` (
   `nr` int(11) NOT NULL,
   `name` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL,
-  `position` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL
+  `position` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `employee`
+--
+
+INSERT INTO `employee` (`nr`, `name`, `position`) VALUES
+(1, 'Maximiliano Zakarias', 1),
+(2, 'Rånny enkelmann', 2),
+(3, 'Kåre Catalan', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `employee_position`
+--
+
+CREATE TABLE `employee_position` (
+  `id` int(11) NOT NULL,
+  `position` varchar(30) COLLATE utf8mb4_danish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `employee_position`
+--
+
+INSERT INTO `employee_position` (`id`, `position`) VALUES
+(1, 'customer_rep'),
+(2, 'storekeeper'),
+(3, 'production_planner');
 
 -- --------------------------------------------------------
 
@@ -41,12 +115,18 @@ CREATE TABLE `employee` (
 
 CREATE TABLE `franchise` (
   `id` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
   `name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `address` varchar(100) COLLATE utf8mb4_danish_ci NOT NULL,
-  `neg_price` float NOT NULL
+  `neg_price` float NOT NULL,
+  `address_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `franchise`
+--
+
+INSERT INTO `franchise` (`id`, `name`, `neg_price`, `address_id`) VALUES
+(1, 'XXL', 1200, 1),
+(2, 'Sport1', 1150, 2);
 
 -- --------------------------------------------------------
 
@@ -59,6 +139,14 @@ CREATE TABLE `grip_system` (
   `name` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+--
+-- Dataark for tabell `grip_system`
+--
+
+INSERT INTO `grip_system` (`grip_id`, `name`) VALUES
+(1, 'wax'),
+(2, 'IntelliGrip');
+
 -- --------------------------------------------------------
 
 --
@@ -67,13 +155,19 @@ CREATE TABLE `grip_system` (
 
 CREATE TABLE `individual_store` (
   `id` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
   `name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `address` varchar(100) COLLATE utf8mb4_danish_ci NOT NULL,
   `neg_price` float NOT NULL,
-  `franchise` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL
+  `id_franchise` int(11) DEFAULT NULL,
+  `address_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `individual_store`
+--
+
+INSERT INTO `individual_store` (`id`, `name`, `neg_price`, `id_franchise`, `address_id`) VALUES
+(3, 'XXL Stavanger', 1200, 1, 3),
+(4, 'Birkelands Sport', 1000, NULL, 4);
 
 -- --------------------------------------------------------
 
@@ -83,12 +177,23 @@ CREATE TABLE `individual_store` (
 
 CREATE TABLE `orders` (
   `order_nr` int(11) NOT NULL,
-  `ski_type` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `shipment_id` int(11) NOT NULL,
-  `state_id` int(11) NOT NULL
+  `state_id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `total_price` int(11) DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer_rep` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `orders`
+--
+
+INSERT INTO `orders` (`order_nr`, `state_id`, `parent_id`, `total_price`, `customer_id`, `customer_rep`) VALUES
+(1, 4, NULL, NULL, 2, 1),
+(2, 1, NULL, NULL, 1, 1),
+(3, 1, NULL, NULL, 3, 1),
+(4, 1, NULL, NULL, 4, 1),
+(5, 1, 2, NULL, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -98,9 +203,20 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `order_details` (
   `order_nr` int(11) NOT NULL,
-  `model` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
+  `model` int(11) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `order_details`
+--
+
+INSERT INTO `order_details` (`order_nr`, `model`, `quantity`) VALUES
+(1, 2, 400),
+(2, 1, 423),
+(3, 2, 325),
+(4, 3, 200),
+(5, 4, 445);
 
 -- --------------------------------------------------------
 
@@ -109,11 +225,19 @@ CREATE TABLE `order_details` (
 --
 
 CREATE TABLE `order_history` (
-  `history_id` int(11) NOT NULL,
   `order_nr` int(11) NOT NULL,
-  `employee` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `employee` int(80) NOT NULL,
+  `old_state` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `order_history`
+--
+
+INSERT INTO `order_history` (`order_nr`, `employee`, `old_state`) VALUES
+(1, 1, 1),
+(1, 1, 2),
+(1, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -126,19 +250,15 @@ CREATE TABLE `order_state` (
   `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
--- --------------------------------------------------------
-
 --
--- Tabellstruktur for tabell `places_order`
+-- Dataark for tabell `order_state`
 --
 
-CREATE TABLE `places_order` (
-  `franchise_id` int(11) NOT NULL,
-  `individual_store_id` int(11) NOT NULL,
-  `team_skier_id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `storekeeper_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+INSERT INTO `order_state` (`id`, `state`) VALUES
+(1, 'new'),
+(2, 'open'),
+(3, 'skis avaliable'),
+(4, 'ready to be shipped');
 
 -- --------------------------------------------------------
 
@@ -148,11 +268,19 @@ CREATE TABLE `places_order` (
 
 CREATE TABLE `production_plan` (
   `nr` int(11) NOT NULL,
-  `num_skis_total` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `production_planner_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `production_plan`
+--
+
+INSERT INTO `production_plan` (`nr`, `start_date`, `end_date`, `production_planner_id`) VALUES
+(1, '2020-01-01', '2020-02-01', 3),
+(2, '2020-02-01', '2020-03-01', 3),
+(3, '2020-03-01', '2020-04-01', 3);
 
 -- --------------------------------------------------------
 
@@ -162,13 +290,19 @@ CREATE TABLE `production_plan` (
 
 CREATE TABLE `shipment` (
   `nr` int(11) NOT NULL,
-  `name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `address` varchar(100) COLLATE utf8mb4_danish_ci NOT NULL,
   `pickup_date` date NOT NULL,
   `company_name` varchar(100) COLLATE utf8mb4_danish_ci NOT NULL,
   `driver_id` int(11) NOT NULL,
-  `state_id` int(11) NOT NULL
+  `state_id` int(11) NOT NULL,
+  `address_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `shipment`
+--
+
+INSERT INTO `shipment` (`nr`, `pickup_date`, `company_name`, `driver_id`, `state_id`, `address_id`) VALUES
+(1, '2021-04-05', 'postnord', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -181,16 +315,13 @@ CREATE TABLE `shipment_state` (
   `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
--- --------------------------------------------------------
-
 --
--- Tabellstruktur for tabell `shipment_transporters`
+-- Dataark for tabell `shipment_state`
 --
 
-CREATE TABLE `shipment_transporters` (
-  `shipment_id` int(11) NOT NULL,
-  `company_name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+INSERT INTO `shipment_state` (`id`, `state`) VALUES
+(1, 'ready'),
+(2, 'picked up');
 
 -- --------------------------------------------------------
 
@@ -199,9 +330,28 @@ CREATE TABLE `shipment_transporters` (
 --
 
 CREATE TABLE `size_class` (
-  `id` int(11) NOT NULL,
   `size` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `size_class`
+--
+
+INSERT INTO `size_class` (`size`) VALUES
+(135),
+(140),
+(145),
+(150),
+(155),
+(160),
+(165),
+(170),
+(175),
+(180),
+(185),
+(190),
+(195),
+(200);
 
 -- --------------------------------------------------------
 
@@ -213,16 +363,23 @@ CREATE TABLE `ski` (
   `product_no` int(11) NOT NULL,
   `url` varchar(400) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `msrpp` float DEFAULT NULL,
-  `photo` varchar(400) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `historical` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
   `model_id` int(11) NOT NULL,
   `grip_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `temp_id` int(11) NOT NULL,
   `weight_id` int(11) NOT NULL,
-  `size_id` int(11) NOT NULL
+  `size` int(11) NOT NULL,
+  `temp` varchar(20) COLLATE utf8mb4_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `ski`
+--
+
+INSERT INTO `ski` (`product_no`, `url`, `msrpp`, `historical`, `model_id`, `grip_id`, `type_id`, `weight_id`, `size`, `temp`) VALUES
+(1, NULL, 1700, 0, 3, 1, 1, 1, 135, 'cold'),
+(2, NULL, 1700, 0, 5, 1, 1, 2, 140, 'cold'),
+(3, NULL, 1700, 0, 2, 2, 1, 3, 150, 'cold');
 
 -- --------------------------------------------------------
 
@@ -235,17 +392,18 @@ CREATE TABLE `ski_model` (
   `name` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
--- --------------------------------------------------------
-
 --
--- Tabellstruktur for tabell `ski_plan`
+-- Dataark for tabell `ski_model`
 --
 
-CREATE TABLE `ski_plan` (
-  `plan_id` int(11) NOT NULL,
-  `model` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
-  `amount` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+INSERT INTO `ski_model` (`model_id`, `name`) VALUES
+(1, 'Active'),
+(2, 'Active Pro'),
+(3, 'Endurance'),
+(4, 'Intrasonic'),
+(5, 'Race Pro'),
+(6, 'Race Speed'),
+(7, 'Redline');
 
 -- --------------------------------------------------------
 
@@ -255,8 +413,21 @@ CREATE TABLE `ski_plan` (
 
 CREATE TABLE `ski_production_plan` (
   `plan_id` int(11) NOT NULL,
-  `product_no` int(11) NOT NULL
+  `product_no` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `ski_production_plan`
+--
+
+INSERT INTO `ski_production_plan` (`plan_id`, `product_no`, `quantity`) VALUES
+(1, 1, 200),
+(1, 2, 55),
+(1, 3, 125),
+(2, 1, 800),
+(2, 2, 500),
+(3, 1, 100);
 
 -- --------------------------------------------------------
 
@@ -265,9 +436,16 @@ CREATE TABLE `ski_production_plan` (
 --
 
 CREATE TABLE `ski_temperature` (
-  `temp_id` int(11) NOT NULL,
-  `temperature` varchar(4) COLLATE utf8mb4_danish_ci DEFAULT NULL
+  `temperature` varchar(4) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `ski_temperature`
+--
+
+INSERT INTO `ski_temperature` (`temperature`) VALUES
+('cold'),
+('warm');
 
 -- --------------------------------------------------------
 
@@ -280,6 +458,15 @@ CREATE TABLE `ski_type` (
   `name` varchar(80) COLLATE utf8mb4_danish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+--
+-- Dataark for tabell `ski_type`
+--
+
+INSERT INTO `ski_type` (`type_id`, `name`) VALUES
+(1, 'skate'),
+(2, 'classic'),
+(3, 'double pole');
+
 -- --------------------------------------------------------
 
 --
@@ -288,13 +475,18 @@ CREATE TABLE `ski_type` (
 
 CREATE TABLE `team_skier` (
   `id` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
   `name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
   `dob` date NOT NULL,
   `club` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL,
   `num_skis` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `team_skier`
+--
+
+INSERT INTO `team_skier` (`id`, `name`, `dob`, `club`, `num_skis`) VALUES
+(5, 'Prompkus Zakarias Keegjord', '1996-02-02', 'catalan il', 200);
 
 -- --------------------------------------------------------
 
@@ -305,6 +497,15 @@ CREATE TABLE `team_skier` (
 CREATE TABLE `transporters` (
   `company_name` varchar(80) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `transporters`
+--
+
+INSERT INTO `transporters` (`company_name`) VALUES
+('bring'),
+('postnord'),
+('zakariasens tungtransport og rollerburger');
 
 -- --------------------------------------------------------
 
@@ -319,20 +520,55 @@ CREATE TABLE `weight_class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
+-- Dataark for tabell `weight_class`
+--
+
+INSERT INTO `weight_class` (`id`, `min_weight`, `max_weight`) VALUES
+(1, 20, 30),
+(2, 30, 40),
+(3, 40, 50),
+(4, 50, 60),
+(5, 60, 70),
+(6, 70, 80),
+(7, 80, 90),
+(8, 90, 200);
+
+--
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `customer_customer_fk` (`customer_rep`);
 
 --
 -- Indexes for table `employee`
 --
 ALTER TABLE `employee`
-  ADD PRIMARY KEY (`nr`);
+  ADD PRIMARY KEY (`nr`),
+  ADD KEY `employee_employee_fk6` (`position`);
+
+--
+-- Indexes for table `employee_position`
+--
+ALTER TABLE `employee_position`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `franchise`
 --
 ALTER TABLE `franchise`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `franchise_franchise_fkfkf1` (`address_id`);
 
 --
 -- Indexes for table `grip_system`
@@ -344,44 +580,40 @@ ALTER TABLE `grip_system`
 -- Indexes for table `individual_store`
 --
 ALTER TABLE `individual_store`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `individual_store_fk1` (`id_franchise`),
+  ADD KEY `individual_store_individual_fkfk` (`address_id`);
 
 --
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_nr`),
-  ADD KEY `orders_fk` (`parent_id`),
-  ADD KEY `orders_fk2` (`shipment_id`),
-  ADD KEY `orders_fk3` (`state_id`);
+  ADD KEY `orders_fk3` (`state_id`),
+  ADD KEY `orders_orders_fk5` (`parent_id`),
+  ADD KEY `orders_orders_fkfk` (`customer_id`),
+  ADD KEY `orders_orders_fkfk2` (`customer_rep`);
 
 --
 -- Indexes for table `order_details`
 --
 ALTER TABLE `order_details`
-  ADD PRIMARY KEY (`order_nr`,`model`);
+  ADD PRIMARY KEY (`order_nr`,`model`),
+  ADD KEY `order_details_fk2` (`model`);
 
 --
 -- Indexes for table `order_history`
 --
 ALTER TABLE `order_history`
-  ADD PRIMARY KEY (`order_nr`,`history_id`);
+  ADD PRIMARY KEY (`order_nr`,`employee`,`old_state`),
+  ADD KEY `order_history_fk2` (`employee`),
+  ADD KEY `order_history_fkfk3` (`old_state`);
 
 --
 -- Indexes for table `order_state`
 --
 ALTER TABLE `order_state`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `places_order`
---
-ALTER TABLE `places_order`
-  ADD PRIMARY KEY (`franchise_id`,`individual_store_id`,`team_skier_id`,`order_id`,`storekeeper_id`),
-  ADD KEY `Places_order_fk2` (`individual_store_id`),
-  ADD KEY `Places_order_fk3` (`team_skier_id`),
-  ADD KEY `places_order_fk4` (`order_id`),
-  ADD KEY `places_order_fk5` (`storekeeper_id`);
 
 --
 -- Indexes for table `production_plan`
@@ -395,7 +627,8 @@ ALTER TABLE `production_plan`
 --
 ALTER TABLE `shipment`
   ADD PRIMARY KEY (`nr`),
-  ADD KEY `shipment_fk` (`state_id`);
+  ADD KEY `shipment_fk` (`state_id`),
+  ADD KEY `shipment_fk_shipment` (`address_id`);
 
 --
 -- Indexes for table `shipment_state`
@@ -404,42 +637,28 @@ ALTER TABLE `shipment_state`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `shipment_transporters`
---
-ALTER TABLE `shipment_transporters`
-  ADD PRIMARY KEY (`shipment_id`,`company_name`),
-  ADD KEY `shipment_transporters_fk2` (`company_name`);
-
---
 -- Indexes for table `size_class`
 --
 ALTER TABLE `size_class`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`size`);
 
 --
 -- Indexes for table `ski`
 --
 ALTER TABLE `ski`
   ADD PRIMARY KEY (`product_no`),
-  ADD KEY `ski_fk` (`order_id`),
   ADD KEY `ski_fk2` (`model_id`),
   ADD KEY `ski_fk3` (`grip_id`),
   ADD KEY `ski_fk4` (`type_id`),
-  ADD KEY `ski_fk5` (`temp_id`),
   ADD KEY `ski_fk6` (`weight_id`),
-  ADD KEY `ski_fk7` (`size_id`);
+  ADD KEY `ski_ski_ski_ski_fk` (`size`),
+  ADD KEY `ski_fk5` (`temp`);
 
 --
 -- Indexes for table `ski_model`
 --
 ALTER TABLE `ski_model`
   ADD PRIMARY KEY (`model_id`);
-
---
--- Indexes for table `ski_plan`
---
-ALTER TABLE `ski_plan`
-  ADD PRIMARY KEY (`plan_id`,`model`);
 
 --
 -- Indexes for table `ski_production_plan`
@@ -452,7 +671,7 @@ ALTER TABLE `ski_production_plan`
 -- Indexes for table `ski_temperature`
 --
 ALTER TABLE `ski_temperature`
-  ADD PRIMARY KEY (`temp_id`);
+  ADD PRIMARY KEY (`temperature`);
 
 --
 -- Indexes for table `ski_type`
@@ -483,159 +702,155 @@ ALTER TABLE `weight_class`
 --
 
 --
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `franchise`
+-- AUTO_INCREMENT for table `employee_position`
 --
-ALTER TABLE `franchise`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `employee_position`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `grip_system`
 --
 ALTER TABLE `grip_system`
-  MODIFY `grip_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `individual_store`
---
-ALTER TABLE `individual_store`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `grip_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `production_plan`
 --
 ALTER TABLE `production_plan`
-  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `shipment`
 --
 ALTER TABLE `shipment`
-  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `size_class`
---
-ALTER TABLE `size_class`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ski`
 --
 ALTER TABLE `ski`
-  MODIFY `product_no` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `ski_model`
 --
 ALTER TABLE `ski_model`
-  MODIFY `model_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `ski_temperature`
---
-ALTER TABLE `ski_temperature`
-  MODIFY `temp_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `model_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `ski_type`
 --
 ALTER TABLE `ski_type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `team_skier`
---
-ALTER TABLE `team_skier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `weight_class`
 --
 ALTER TABLE `weight_class`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Begrensninger for dumpede tabeller
 --
 
 --
+-- Begrensninger for tabell `customer`
+--
+ALTER TABLE `customer`
+  ADD CONSTRAINT `customer_customer_fk` FOREIGN KEY (`customer_rep`) REFERENCES `employee` (`nr`);
+
+--
+-- Begrensninger for tabell `employee`
+--
+ALTER TABLE `employee`
+  ADD CONSTRAINT `employee_employee_fk6` FOREIGN KEY (`position`) REFERENCES `employee_position` (`id`) ON UPDATE CASCADE;
+
+--
+-- Begrensninger for tabell `franchise`
+--
+ALTER TABLE `franchise`
+  ADD CONSTRAINT `franchise_franchise_fk6` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `franchise_franchise_fkfkf1` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`);
+
+--
+-- Begrensninger for tabell `individual_store`
+--
+ALTER TABLE `individual_store`
+  ADD CONSTRAINT `individual_store_fk1` FOREIGN KEY (`id_franchise`) REFERENCES `franchise` (`id`),
+  ADD CONSTRAINT `individual_store_fkfk1` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `individual_store_individual_fkfk` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON UPDATE CASCADE;
+
+--
 -- Begrensninger for tabell `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_fk` FOREIGN KEY (`parent_id`) REFERENCES `orders` (`order_nr`),
-  ADD CONSTRAINT `orders_fk2` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`nr`),
-  ADD CONSTRAINT `orders_fk3` FOREIGN KEY (`state_id`) REFERENCES `order_state` (`id`);
+  ADD CONSTRAINT `orders_fk3` FOREIGN KEY (`state_id`) REFERENCES `order_state` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_orders_fk5` FOREIGN KEY (`parent_id`) REFERENCES `orders` (`order_nr`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_orders_fkfk` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  ADD CONSTRAINT `orders_orders_fkfk2` FOREIGN KEY (`customer_rep`) REFERENCES `employee` (`nr`);
 
 --
 -- Begrensninger for tabell `order_details`
 --
 ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`);
+  ADD CONSTRAINT `order_details_fk1` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_details_fk2` FOREIGN KEY (`model`) REFERENCES `ski_model` (`model_id`) ON UPDATE CASCADE;
 
 --
 -- Begrensninger for tabell `order_history`
 --
 ALTER TABLE `order_history`
-  ADD CONSTRAINT `order_history_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`);
-
---
--- Begrensninger for tabell `places_order`
---
-ALTER TABLE `places_order`
-  ADD CONSTRAINT `Places_order_fk` FOREIGN KEY (`franchise_id`) REFERENCES `franchise` (`id`),
-  ADD CONSTRAINT `Places_order_fk2` FOREIGN KEY (`individual_store_id`) REFERENCES `individual_store` (`id`),
-  ADD CONSTRAINT `Places_order_fk3` FOREIGN KEY (`team_skier_id`) REFERENCES `team_skier` (`id`),
-  ADD CONSTRAINT `places_order_fk4` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_nr`),
-  ADD CONSTRAINT `places_order_fk5` FOREIGN KEY (`storekeeper_id`) REFERENCES `employee` (`nr`);
+  ADD CONSTRAINT `order_history_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`),
+  ADD CONSTRAINT `order_history_fk2` FOREIGN KEY (`employee`) REFERENCES `employee` (`nr`),
+  ADD CONSTRAINT `order_history_fkfk3` FOREIGN KEY (`old_state`) REFERENCES `order_state` (`id`);
 
 --
 -- Begrensninger for tabell `production_plan`
 --
 ALTER TABLE `production_plan`
-  ADD CONSTRAINT `production_plan_fk` FOREIGN KEY (`production_planner_id`) REFERENCES `employee` (`nr`);
+  ADD CONSTRAINT `production_plan_fk` FOREIGN KEY (`production_planner_id`) REFERENCES `employee` (`nr`) ON UPDATE CASCADE;
 
 --
 -- Begrensninger for tabell `shipment`
 --
 ALTER TABLE `shipment`
-  ADD CONSTRAINT `shipment_fk` FOREIGN KEY (`state_id`) REFERENCES `shipment_state` (`id`);
-
---
--- Begrensninger for tabell `shipment_transporters`
---
-ALTER TABLE `shipment_transporters`
-  ADD CONSTRAINT `shipment_transporters_fk` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`nr`),
-  ADD CONSTRAINT `shipment_transporters_fk2` FOREIGN KEY (`company_name`) REFERENCES `transporters` (`company_name`);
+  ADD CONSTRAINT `shipment_fk` FOREIGN KEY (`state_id`) REFERENCES `shipment_state` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `shipment_fk_shipment` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON UPDATE CASCADE;
 
 --
 -- Begrensninger for tabell `ski`
 --
 ALTER TABLE `ski`
-  ADD CONSTRAINT `ski_fk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_nr`),
   ADD CONSTRAINT `ski_fk2` FOREIGN KEY (`model_id`) REFERENCES `ski_model` (`model_id`),
   ADD CONSTRAINT `ski_fk3` FOREIGN KEY (`grip_id`) REFERENCES `grip_system` (`grip_id`),
   ADD CONSTRAINT `ski_fk4` FOREIGN KEY (`type_id`) REFERENCES `ski_type` (`type_id`),
-  ADD CONSTRAINT `ski_fk5` FOREIGN KEY (`temp_id`) REFERENCES `ski_temperature` (`temp_id`),
+  ADD CONSTRAINT `ski_fk5` FOREIGN KEY (`temp`) REFERENCES `ski_temperature` (`temperature`),
   ADD CONSTRAINT `ski_fk6` FOREIGN KEY (`weight_id`) REFERENCES `weight_class` (`id`),
-  ADD CONSTRAINT `ski_fk7` FOREIGN KEY (`size_id`) REFERENCES `size_class` (`id`);
-
---
--- Begrensninger for tabell `ski_plan`
---
-ALTER TABLE `ski_plan`
-  ADD CONSTRAINT `ski_plan_fk` FOREIGN KEY (`plan_id`) REFERENCES `production_plan` (`nr`);
+  ADD CONSTRAINT `ski_ski_ski_ski_fk` FOREIGN KEY (`size`) REFERENCES `size_class` (`size`);
 
 --
 -- Begrensninger for tabell `ski_production_plan`
@@ -643,6 +858,12 @@ ALTER TABLE `ski_plan`
 ALTER TABLE `ski_production_plan`
   ADD CONSTRAINT `ski_production_plan_fk` FOREIGN KEY (`plan_id`) REFERENCES `production_plan` (`nr`),
   ADD CONSTRAINT `ski_production_plan_fk2` FOREIGN KEY (`product_no`) REFERENCES `ski` (`product_no`);
+
+--
+-- Begrensninger for tabell `team_skier`
+--
+ALTER TABLE `team_skier`
+  ADD CONSTRAINT `team_skier_skier_fk` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
