@@ -9,4 +9,10 @@ $customer = new CustomerModel;
 
 $res = $customer->getCollection();
 
-print_r($res);
+//print_r($res);
+
+$auth = new AuthorisationModel;
+
+$res2 = $auth->isValid();
+
+print_r($res2);

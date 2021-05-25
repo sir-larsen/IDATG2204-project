@@ -3,6 +3,7 @@ require_once 'DB.php';
 require_once 'AbstractModel.php';
 require_once 'BadRequestException.php';
 
+//TEST CLASS FOR TABLE
 /**
  * Class CustomerModel for accessing customer data in the database
  */
