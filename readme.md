@@ -16,4 +16,5 @@
 
 | URI | Description of functionality | Purpose of test | Responsible | Time of implementation |
 |-----|-------------|---------------|------------------------------|------------------------------------|
-|/company/customer_rep/{:employee_nr}/orders?state={:state} | Retrieve a list of orders based on state. Without the flag all orders will be showcased |Test that the appropriate orders will be displayed. This includes that the orders are in the specified state and that they truly belong to the specified customer rep.  |  Sander Fuhr| While developing the specified endpoint |
+|/company/customer_rep/{:employee_nr}/orders?state={:state} | Retrieve a list of orders based state. Without the flag all orders will be showcased |Test that the appropriate orders will be displayed. This includes that the orders are in the specified state and that they truly belong to the specified customer rep.  |  Sander Fuhr| While developing the specified endpoint |
+|/company/customer_rep/{:employee_nr}/{:order_number}/{:new_state} | Changes a state of an order from the current one to the new specified in the url | Test that the order gets assigned its new state and that only legal states goes through | Alexander Eckhoff Larsen | While developing the specified endpoint|
