@@ -37,4 +37,4 @@
 
 | URI | Description of functionality | Purpose of test | Responsible | Time of implementation |
 |-----|-------------|---------------|------------------------------|------------------------------------|
-|/?model={:model_name} | Through this interface, any Internet user should be able to find information about the various types of skis. The user may optionally specify a filter based on model names. |Test that all skis are displayed with the correct information when using the standard public interface. When using the filter, information about a single model should be displayed.  |  Markus Zakarias Strømseth | While developing the specified endpoint |
+|/?model={:model_name} | Through this interface, any Internet user should be able to find information about the various types of skis. The user may optionally specify a filter based on model names. |Test that all skis are displayed with the correct information when using the standard public interface. When using the filter, information about a single model should be displayed.  |  Markus Zakarias Strømsethi | While developing the specified endpoint |

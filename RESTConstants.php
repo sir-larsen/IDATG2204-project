@@ -28,9 +28,12 @@ class RESTConstants
     const ENDPOINT_DEALERS = 'dealers';
     const ENDPOINT_USEDCARS = 'used-cars';
     const ENDPOINT_REPORT = 'create-report';
+
     const ENDPOINT_REPORT_DEALER_STOCK = 'dealer-stock';
     const ENDPOINT_ID = '{id}';*/
-
+    const ENDPOINT_CUSTOMER = 'customer';
+    const ENDPOINT_COMPANY = 'company';
+    const ENDPOINT_TRANSPORTER = 'transporter';
     // Defined database errors
     const DB_ERR_ATTRIBUTE_MISSING = 1;
     const DB_ERR_FK_INTEGRITY = 2;
