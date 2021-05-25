@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 24. Mai, 2021 22:05 PM
+-- Generation Time: 25. Mai, 2021 18:51 PM
 -- Tjener-versjon: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -41,6 +41,26 @@ INSERT INTO `address` (`id`, `address`) VALUES
 (2, 'Fisegata 3 4026 Stavanger'),
 (3, 'Rumpeveien 12 2815 Gjøvik'),
 (4, 'Markus Zakarias Prompevei 7 5000 Bærum');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellstruktur for tabell `auth_token`
+--
+
+CREATE TABLE `auth_token` (
+  `id` int(11) NOT NULL,
+  `token` varchar(400) COLLATE utf8mb4_danish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `auth_token`
+--
+
+INSERT INTO `auth_token` (`id`, `token`) VALUES
+(1, '7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51'),
+(2, '4b36a056eebfab7e4bbb26a278309812f55623b9675d4b4e9345f3fbf89e71d3'),
+(3, '9d34402491a7e00f0ed216ed2f6ac63b2848ce41ad17a65bde2fffd47f7445c2');
 
 -- --------------------------------------------------------
 
@@ -181,19 +201,20 @@ CREATE TABLE `orders` (
   `parent_id` int(11) DEFAULT NULL,
   `total_price` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
-  `customer_rep` int(11) DEFAULT NULL
+  `customer_rep` int(11) DEFAULT NULL,
+  `date_placed` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dataark for tabell `orders`
 --
 
-INSERT INTO `orders` (`order_nr`, `state_id`, `parent_id`, `total_price`, `customer_id`, `customer_rep`) VALUES
-(1, 4, NULL, NULL, 2, 1),
-(2, 1, NULL, NULL, 1, 1),
-(3, 1, NULL, NULL, 3, 1),
-(4, 1, NULL, NULL, 4, 1),
-(5, 1, 2, NULL, 4, 1);
+INSERT INTO `orders` (`order_nr`, `state_id`, `parent_id`, `total_price`, `customer_id`, `customer_rep`, `date_placed`) VALUES
+(1, 4, NULL, NULL, 2, 1, '2021-03-15'),
+(2, 1, NULL, NULL, 1, 1, '2021-05-10'),
+(3, 1, NULL, NULL, 3, 1, '2021-05-24'),
+(4, 1, NULL, NULL, 4, 1, '2021-04-11'),
+(5, 1, 2, NULL, 4, 1, '2021-04-28');
 
 -- --------------------------------------------------------
 
@@ -268,19 +289,18 @@ INSERT INTO `order_state` (`id`, `state`) VALUES
 
 CREATE TABLE `production_plan` (
   `nr` int(11) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `production_planner_id` int(11) NOT NULL
+  `production_planner_id` int(11) NOT NULL,
+  `period` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dataark for tabell `production_plan`
 --
 
-INSERT INTO `production_plan` (`nr`, `start_date`, `end_date`, `production_planner_id`) VALUES
-(1, '2020-01-01', '2020-02-01', 3),
-(2, '2020-02-01', '2020-03-01', 3),
-(3, '2020-03-01', '2020-04-01', 3);
+INSERT INTO `production_plan` (`nr`, `production_planner_id`, `period`) VALUES
+(1, 3, 1),
+(2, 3, 2),
+(3, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -544,6 +564,12 @@ ALTER TABLE `address`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `auth_token`
+--
+ALTER TABLE `auth_token`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
@@ -741,7 +767,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `production_plan`
 --
 ALTER TABLE `production_plan`
-  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `shipment`
