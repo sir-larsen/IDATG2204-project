@@ -19,7 +19,7 @@ class AuthorisationModel extends DB
      * @return bool indicating whether the token was successfully verified
      */
     public function isValid(string $token, string $userType): bool {
-        $res = [];
+        $res = []; //Array for storing db response
         
         $query = 'SELECT * FROM auth_token/* WHERE token = :token*/';
         /*$stmt = $this->db->prepare($query);
@@ -32,7 +32,7 @@ class AuthorisationModel extends DB
         }
         //return $res; //FJERN DENNE ETTERPÅ
 
-        switch ($userType) {
+        switch ($userType) { //Checking for the different usertypes here
             case DBConstants::EMPLOYEE_CREP:
                 if ($res[0]['token'] == $token) {
                     return true;
