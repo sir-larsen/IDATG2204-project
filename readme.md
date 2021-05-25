@@ -22,3 +22,6 @@
 |/company/storekeeper/{:employee_nr}/skis | Adding information about newly produced skis as they have passed quality control through Post request. | Test that skis are successfully placed in the database with the correct information. | Sander Fuhr | While developing the specified endpoint |
 |/company/storekeeper/{:employee_nr}/available_skis | Retrieving orders in the "available skis" state. | Test that the appropriate orders are being retrieved with the right states. | Alexander Eckhoff Larsen | While developing the sepcified endpoint |
 |/company/storekeeper/{:employee_nr}/{:order_number}/ready | Changing the state of an order from skis available to ready to be shipped when the order has been filled | Test that the order's state is successfully updated and that only orders with "skis available" can be set to ready to be shipped. | Markus Zakarias Strømseth | While developing the specified endpoint |
+|/company/production_planner/{:employee_nr}/plan | Uploading the production plan for a given four-week period using a POST request. | Test that the plan is successfully uploaded and that the information is formatted right. | Alexander Eckhoff Larsen | While developing the specified endpoint |
+
+
