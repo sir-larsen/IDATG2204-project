@@ -10,5 +10,5 @@
 |/customer/{:customer_id}/place_order  | Allows user to place an order by sending a post request using e.g Postman.| Test that a user is able to place an order by sending a body consisting of order information.| Markus Zakarias Strømseth| While developing the specified endpoint|
 |/customer/{:customer_id}/cancel_order/{:order_number} | Allows user to cancel an order based on the order number | Test that only the authorized user is able to cancel the right order. It should then update its state. | Sander Fuhr | While developing the specified endpoint|
 |/customer/{:customer_id}/split/{:order_number} |The unfilled items in the order is moved to a new order (set in the open state), and the existing order is changed from the skis available to ready for shipment states. | Test that the order is being split appropriately and that the right states are set. | Alexander Eckhoff Larsen | While developing the specified endpoint |
-
+|/customer/{:customer_id}/retrieve_plan | retrieve a four-production plan summary showing the total number of skies of each type being planned for the period | Test that the correct plan with correct information is being showcased. | Markus Zakarias Strømseth | While developing the specified endpoint|
 
