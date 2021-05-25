@@ -31,3 +31,10 @@
 |-----|-------------|---------------|------------------------------|------------------------------------|
 |/transporter/orders | Retrieve information about orders ready for shipment |Test that the appropriate orders are being retrieved with the right states.  |  Sander Fuhr | While developing the specified endpoint |
 |/transporter/shipment/{:shipment_number} | Change the state of the shipment when it has been picked up | Test that the correct shipment's state is updated with the appropriate state. | Alexander Eckhoff Larsen |  While developing the specified endpoint |
+
+
+### Public endpoint:
+
+| URI | Description of functionality | Purpose of test | Responsible | Time of implementation |
+|-----|-------------|---------------|------------------------------|------------------------------------|
+|/?model={:model_name} | Through this interface, any Internet user should be able to find information about the various types of skis. The user may optionally specify a filter based on model names. |Test that all skis are displayed with the correct information when using the standard public interface. When using the filter, information about a single model should be displayed.  |  Markus Zakarias Strømseth | While developing the specified endpoint |
