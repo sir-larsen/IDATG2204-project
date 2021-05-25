@@ -25,3 +25,9 @@
 |/company/production_planner/{:employee_nr}/plan | Uploading the production plan for a given four-week period using a POST request. | Test that the plan is successfully uploaded and that the information is formatted right. | Alexander Eckhoff Larsen | While developing the specified endpoint |
 
 
+### Transporter endpoints:
+
+| URI | Description of functionality | Purpose of test | Responsible | Time of implementation |
+|-----|-------------|---------------|------------------------------|------------------------------------|
+|/transporter/orders | Retrieve information about orders ready for shipment |Test that the appropriate orders are being retrieved with the right states.  |  Sander Fuhr | While developing the specified endpoint |
+|/transporter/shipment/{:shipment_number} | Change the state of the shipment when it has been picked up | Test that the correct shipment's state is updated with the appropriate state. | Alexander Eckhoff Larsen |  While developing the specified endpoint |
