@@ -13,6 +13,28 @@ class AuthorisationModel extends DB
     }
 
     /**
+     * Authorisation mechanism for checking if the user is an employee
+     * @param string $token - The hash
+     * @return bool Idicating whether the authorisation was successful
+     */
+    public function isEmployee(string $token): bool {
+        $res = [];
+
+        $query = 'SELECT * FROM auth_token WHERE id = 1 OR id = 2 OR id = 3';
+        $stmt = $this->db->query($query);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[] = array('id' => intval($row['id']), 'token' => $row['token']);
+        }
+
+        if ($token == $res[0]['token'] || $token == $res[1]['token'] || $token == $res[2]['token']) {
+            return true;
+        }
+        //throw new BadRequestException("bad request " . 400);
+        return false;
+    }
+
+    /**
      * Simple authorisation mechanism - Checking that the token provided matches one of the ones in the database
      * @param string $token
      * @param string $userType - Type of user to be checked for, see in DBConstants.php

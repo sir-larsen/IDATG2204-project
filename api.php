@@ -29,9 +29,19 @@ if (strlen($content) > 0) {
 
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading the hash from the client trying to access
 
+//print($uri[0]);
+
 //Handle the request
 $controller = new APIController();
 try {
+    switch ($uri[0]) {
+        case RESTConstants::ENDPOINT_CUSTOMER:
+            $controller->authorise($token, DBConstants::CUSTOMER, RESTConstants::API_URI . '/');
+        case RESTConstants::ENDPOINT_TRANSPORTER:
+            $controller->authorise($token, DBConstants::TRANSPORT, RESTConstants::API_URI . '/');
+        case RESTConstants::ENDPOINT_COMPANY:
+            $controller->authoriseEmployee($token, RESTConstants::API_URI . '/');
+    }
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
     //print_r($res);

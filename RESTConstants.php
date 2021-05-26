@@ -30,7 +30,7 @@ class RESTConstants
     const ENDPOINT_REPORT = 'create-report';
     const ENDPOINT_REPORT_DEALER_STOCK = 'dealer-stock';
     const ENDPOINT_ID = '{id}';*/
-    const ENDPOINT_ORDERS = 'orders';
+    //const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_COMPANY = 'company';
     const ENDPOINT_CUSTOMER = 'customer';
     const ENDPOINT_TRANSPORTER = 'transporter';

@@ -17,8 +17,8 @@ abstract class ResourceController extends RequestHandler
      * @see handleCollectionRequest for the handling og collection requests
      * @see handleResourceRequest for the handling of resource requests
      */
-    public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
-    {
+    public abstract function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array;
+    /*{
         //Collection request
         if (count($uri) == 0) { 
             //Check if method is valid
@@ -41,9 +41,9 @@ abstract class ResourceController extends RequestHandler
                 //Handle possible error
             //Forward to sub resource request
         }*/
-        $res = array();
+        /*$res = array();
         return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN
-    }
+    }*/
 
     /**
      * The function handling the collection requests. The function is a dispatcher method that forwards the retrieval

@@ -33,3 +33,6 @@ else
 $order = new OrdersEndpoint();
 
 print_r($order->handleRequest([], "", "", [], []));
+
+$auth = new AuthorisationModel;
+print($auth->isEmployee('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132'));

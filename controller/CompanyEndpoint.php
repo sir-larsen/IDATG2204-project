@@ -2,16 +2,15 @@
 require_once 'RESTConstants.php';
 require_once 'ResourceController.php';
 require_once 'errors.php';
-//require_once 'db/DealerModel.php';
 
 /**
- * Class OrdersEndpoint implementing the orders endpoint controller
+ * Class CustomerEndpoint for customer requests
  */
-class OrdersEndpoint extends ResourceController
+class CompanyEndpoint extends ResourceController
 {
     public function __construct()
     {
-        //SETTING ALL THE ALLOWED METHODS AND REQUESTS HERE
+        //SETTING ALL ALLOWED METHODS AND REQUESTS HERE
     }
 
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
@@ -42,7 +41,7 @@ class OrdersEndpoint extends ResourceController
         $res = array();
         return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN
     }
-
+    
     protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $res = array();

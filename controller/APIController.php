@@ -4,6 +4,7 @@ require_once 'RequestHandler.php';
 //require_once 'UsedCarsEndpoint.php';
 //require_once 'ReportController.php';
 require_once 'OrdersEndpoint.php';
+require_once 'CompanyEndpoint.php';
 require_once 'RESTConstants.php';
 require_once 'db/AuthorisationModel.php';
 require_once 'errors.php';
@@ -25,12 +26,13 @@ class APIController extends RequestHandler
         $this->validRequests[] = RESTConstants::ENDPOINT_CUSTOMER;
         $this->validRequests[] = RESTConstants::ENDPOINT_TRANSPORTER;
         $this->validRequests[] = RESTConstants::ENDPOINT_PUBLIC;
-        $this->validRequests[] = RESTConstants::ENDPOINT_ORDERS;
+        //$this->validRequests[] = RESTConstants::ENDPOINT_ORDERS;
     }
 
+    
+
     /**
-     * Verifies that the request contains a valid authorisation token. The authorisation scheme is quite simple -
-     * assuming that there is only one authorisation token for the complete API
+     * Verifies that the request contains a valid authorisation token.
      * @param string $token the authorisation token to be verified
      * @param string $userType the type of user to checked against
      * @param string $endpointPath the request endpoint
@@ -38,6 +40,18 @@ class APIController extends RequestHandler
      */
     public function authorise(string $token, string $userType, string $endpointPath) {
         if (!(new AuthorisationModel())->isValid($token, $userType)) {
+            throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
+        }
+    }
+
+    /**
+     * Verifies that the request contains a valid authorisation token.
+     * @param string $token the authorisation token to be verified
+     * @param string $endpointPath the request endpoint
+     * @throws APIException with the code set to HTTP_FORBIDDEN if the token is not valid
+     */
+    public function authoriseEmployee(string $token, string $endpointPath) {
+        if (!(new AuthorisationModel())->isEmployee($token)) {
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
         }
     }
@@ -61,8 +75,8 @@ class APIController extends RequestHandler
 
         $endpointPath .= '/' . $uri[0];
         switch ($endpointUri) {
-            case RESTConstants::ENDPOINT_ORDERS:
-                $endpoint = new OrdersEndpoint();
+            case RESTConstants::ENDPOINT_COMPANY:
+                $endpoint = new CompanyEndpoint();
                 break;
             //LEGGE TIL FLERE CASER HER
         }
