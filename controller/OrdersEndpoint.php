@@ -17,9 +17,15 @@ class OrdersEndpoint extends ResourceController
     protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $res = array();
-        $res['cock'] = 5;
-        $res['balls'] = 10;
+        $res['hoi'] = 5;
+        $res['Prompkus'] = 10;
         $res['status'] = RESTConstants::HTTP_OK;
+        $res['result'] = array();
+        $res['result'][] = 5;
+        $res['result'][] = 'Prompkus';
+        $res['result'][] = 7;
+        $res['result'][] = 8;
+
         
         return $res;
     }

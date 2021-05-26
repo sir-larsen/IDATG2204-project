@@ -1,8 +1,9 @@
 <?php
 require_once 'RequestHandler.php';
-require_once 'DealersEndpoint.php';
-require_once 'UsedCarsEndpoint.php';
-require_once 'ReportController.php';
+//require_once 'DealersEndpoint.php';
+//require_once 'UsedCarsEndpoint.php';
+//require_once 'ReportController.php';
+require_once 'OrdersEndpoint.php';
 require_once 'RESTConstants.php';
 require_once 'db/AuthorisationModel.php';
 require_once 'errors.php';
