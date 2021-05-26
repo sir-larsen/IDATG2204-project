@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 25. Mai, 2021 18:51 PM
+-- Generation Time: 25. Mai, 2021 20:56 PM
 -- Tjener-versjon: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -60,7 +60,9 @@ CREATE TABLE `auth_token` (
 INSERT INTO `auth_token` (`id`, `token`) VALUES
 (1, '7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51'),
 (2, '4b36a056eebfab7e4bbb26a278309812f55623b9675d4b4e9345f3fbf89e71d3'),
-(3, '9d34402491a7e00f0ed216ed2f6ac63b2848ce41ad17a65bde2fffd47f7445c2');
+(3, '9d34402491a7e00f0ed216ed2f6ac63b2848ce41ad17a65bde2fffd47f7445c2'),
+(4, '544c4686e64cdcdaba07ec71b4940122b0e9cc844d803d6cbc7282e139b08960'),
+(5, 'd8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132');
 
 -- --------------------------------------------------------
 
