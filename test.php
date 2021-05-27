@@ -10,6 +10,7 @@ require_once 'DBConstants.php';
 require_once 'controller/CompanyEndpoint.php';
 require_once 'db/PublicModel.php';
 require_once 'controller/PublicEndpoint.php';
+require_once 'db/TransporterModel.php';
 
 //$customer = new CustomerModel;
 
@@ -44,8 +45,8 @@ print($cock . "\n\n");
 print_r(DBConstants::EMPLOYEES);
 print(DBConstants::EMPLOYEES[0]);*/
 
-$cust = new CompanyEndpoint('prodplanner');
-print($cust->employeeType);
+//$cust = new CompanyEndpoint('prodplanner');
+//print($cust->employeeType);
 //$auth = new AuthorisationModel;
 //print($auth->isEmployee('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132'));
 
@@ -80,3 +81,9 @@ $res = $public->getGrip(null,'intelligrip');
 
 print_r($res);
 */
+
+$transporter = new TransporterModel();
+
+$res = $transporter->getCollection();
+
+print_r($res);

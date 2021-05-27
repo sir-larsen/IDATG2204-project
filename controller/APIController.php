@@ -84,6 +84,11 @@ class APIController extends RequestHandler
                 $endpoint = new PublicEndpoint();
 
                 break;
+          //  case RESTConstants::ENDPOINT_TRANSPORTER:
+          //      $endpoint = new TransporterEndpoint();
+
+          //      break;
+
 
 
             //LEGGE TIL FLERE CASER HER
