@@ -37,10 +37,13 @@ try { //Authorization mechanism for checking restricted endpoints
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
             $controller->authorise($token, DBConstants::CUSTOMER, RESTConstants::API_URI . '/');
+            break;
         case RESTConstants::ENDPOINT_TRANSPORTER:
             $controller->authorise($token, DBConstants::TRANSPORT, RESTConstants::API_URI . '/');
+            break;
         case RESTConstants::ENDPOINT_COMPANY:
             $controller->authoriseEmployee($token, RESTConstants::API_URI . '/');
+            break;
     }
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
