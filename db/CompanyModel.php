@@ -11,6 +11,17 @@ class CompanyModel extends DB {
         parent::__construct();
     }
 
+   /**
+   * Returns the orders in regards to the filter set
+   * @param array $query an optional set of conditions that the retrieved
+   *              resources need to meet - e.g., array('state' => array('new', ...)) would
+   *              mean that only resources having state = 'new' would be returned.
+   * @return array an array of associative arrays of resource attributes. The
+   *               array will be empty if there are no resources to be returned.
+   * @throws BadRequestException in the case the request from the client is badly formatted or violates application
+   *         or database constraints.
+   * @throws BadRequestException
+   */
     function getOrders(array $filter): array
     {
         $res = array();
