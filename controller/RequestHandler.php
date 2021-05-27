@@ -64,6 +64,6 @@ abstract class RequestHandler
      * @throws BadRequestException in the case the request from the client is badly formatted or violates application
      *         or database constraints.
      */
-    public abstract function handleRequest(array $uri, string $endpointPath, string $requestMethod,
-                                           array $queries, array $payload): array;
+    /*public abstract function handleRequest(array $uri, string $endpointPath, string $requestMethod,
+                                           array $queries, array $payload): array;*/
 }

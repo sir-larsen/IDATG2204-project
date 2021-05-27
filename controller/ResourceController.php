@@ -17,7 +17,7 @@ abstract class ResourceController extends RequestHandler
      * @see handleCollectionRequest for the handling og collection requests
      * @see handleResourceRequest for the handling of resource requests
      */
-    public abstract function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array;
+    //public abstract function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array;
     /*{
         //Collection request
         if (count($uri) == 0) { 

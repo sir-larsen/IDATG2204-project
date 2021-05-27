@@ -65,7 +65,7 @@ class APIController extends RequestHandler
      * @see UsedCarsEndpoint for the used-cars endpoint controller         ////
      * @see ReportController for the report-generator endpoint controller
      */
-    public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
+    public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload, string $userType): array
     {
         //Checking if the request is valid here
         $endpointUri = $uri[0];
@@ -76,7 +76,7 @@ class APIController extends RequestHandler
         $endpointPath .= '/' . $uri[0];
         switch ($endpointUri) {
             case RESTConstants::ENDPOINT_COMPANY:
-                $endpoint = new CompanyEndpoint();
+                $endpoint = new CompanyEndpoint($userType);
                 break;
             //LEGGE TIL FLERE CASER HER
         }

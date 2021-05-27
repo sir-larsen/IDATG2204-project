@@ -30,10 +30,11 @@ if (strlen($content) > 0) {
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading the hash from the client trying to access
 
 //print($uri[0]);
-
+ 
 //Handle the request
 $controller = new APIController();
-try { //Authorization mechanism for checking restricted endpoints 
+try { //Authorization mechanism for checking restricted endpoints
+    $employeeType = ''; //For keeping track of which type of employee to restrict which endpoints
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
             $controller->authorise($token, DBConstants::CUSTOMER, RESTConstants::API_URI . '/');
@@ -43,10 +44,11 @@ try { //Authorization mechanism for checking restricted endpoints
             break;
         case RESTConstants::ENDPOINT_COMPANY:
             $controller->authoriseEmployee($token, RESTConstants::API_URI . '/');
+            $employeeType = (new AuthorisationModel())->getEmployeeType($token);
             break;
     }
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
-    $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
+    $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload, $employeeType);
     //print_r($res);
     http_response_code($res['status']);
     if (isset($res['result']))  {

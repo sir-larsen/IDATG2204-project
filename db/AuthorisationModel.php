@@ -12,7 +12,27 @@ class AuthorisationModel extends DB
         parent::__construct();
     }
 
-    //public function getEmployeeType
+    /**
+     * Function for returning the employeeType, used for restricting access within the company endpoint
+     * @param string $token The hash for the employye type
+     * @return ?string The user type or null depending on if the hash is found
+     */
+    public function getEmployeeType(string $token): ?string {
+        $res = [];
+
+        $query = 'SELECT * FROM auth_token WHERE id = 1 OR id = 2 OR id = 3';
+        $stmt = $this->db->query($query);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[] = array('id' => intval($row['id']), 'token' => $row['token']);
+        }
+
+        foreach ($res as $key => $items) {
+            if ($items['token'] == $token)
+                return DBConstants::EMPLOYEES[$key];
+        }
+        return null;
+    }
 
     /**
      * Authorisation mechanism for checking if the user is an employee

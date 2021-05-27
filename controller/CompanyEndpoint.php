@@ -8,8 +8,12 @@ require_once 'errors.php';
  */
 class CompanyEndpoint extends ResourceController
 {
-    public function __construct()
-    {
+
+    public $employeeType;
+
+    public function __construct(string $employeeType)
+    {   
+        $this->employeeType = $employeeType;
         //SETTING ALL ALLOWED METHODS AND REQUESTS HERE
     }
 

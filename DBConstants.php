@@ -11,4 +11,6 @@ class DBConstants
     const EMPLOYEE_PPLANNER = 'prodplanner';  //Hash id 3 in db
     const CUSTOMER          = 'customer';     //Hash id 4 in db
     const TRANSPORT         = 'transport';    //Hash id 5 in db
+
+    const EMPLOYEES = array('customer_rep', 'storekeeper', 'prodplanner');
 }
