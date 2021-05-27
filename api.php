@@ -29,10 +29,13 @@ if (strlen($content) > 0) {
 
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading the hash from the client trying to access
 
+print($token);
+
 //print($uri[0]);
 
 //Handle the request
 $controller = new APIController();
+
 try {
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
