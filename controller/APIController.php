@@ -40,12 +40,10 @@ class APIController extends RequestHandler
      * @throws APIException with the code set to HTTP_FORBIDDEN if the token is not valid
      */
     public function authorise(string $token, string $userType, string $endpointPath) {
-        /*if (!(new AuthorisationModel())->isValid($token, $userType)) {
-            print("NOT TRUE");
-            //return false;
+        if (!(new AuthorisationModel())->isValid($token, $userType)) {
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
         }
-        //return true;*/
+        return true;
     }
 
     /**

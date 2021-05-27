@@ -56,10 +56,4 @@ abstract class ResourceController extends RequestHandler
      */
     protected abstract function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array;
 
-    /**
-     * Function handling sub requests, forwarding to other functions if necessary.
-     * @see handleRequest
-     */
-    protected abstract function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array;
-
 }

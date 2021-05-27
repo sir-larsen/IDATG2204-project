@@ -14,58 +14,70 @@ class CustomerEndpoint extends ResourceController {
     public function __construct() {
 
         parent::__construct();
-        //$this->validRequests[] = RESTConstants::ENDPOINT_CUSTOMER;
-
-        // Valid collection method calls vs implementation status
-        //$this->validMethods[''] = array();
-        //$this->validMethods[''][RESTConstants::METHOD_GET] = RESTConstants::HTTP_OK;
-        //$this->validMethods[''][RESTConstants::METHOD_POST] = RESTConstants::HTTP_NOT_IMPLEMENTED;
-        //$this->validMethods[''][RESTConstants::METHOD_DELETE] = RESTConstants::HTTP_NOT_IMPLEMENTED;
-
-        // Valid resource method calls vs implementation status
-
-
     }
 
-    public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
-    {
-        $res = array();
-        $res['hoi'] = 5;
-        $res['Prompkus'] = 10;
-        $res['status'] = RESTConstants::HTTP_OK;
-        $res['result'] = array();
-        $res['result'][] = 5;
-        $res['result'][] = 'Prompkus';
-        $res['result'][] = 7;
-        $res['result'][] = 8;
+    public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
+        if (count($uri) == 0) {
+            //Check if method is valid
+            //If not valid throw error
+            //handle the collection request-- Which means actually getting it DOCOLLECTIONREQUEST
+            return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
+        } elseif (count($uri) > 1) {
+            if (!ctype_digit($uri[0])) {
+                //TODO: Throw error for not providing customer ID
+            } else {
+                switch ($uri[1]) {
+                    case ctype_digit($uri[1]):
+                        return $this->retrieveOrder($uri[1]);
+                    case "orders":
+                        return $this->retrieveOrderSince();
+                    case "place_order":
+                        return $this->placeOrder();
+                    case "cancel_order":
+                        return $this->cancelOrder($uri[2]);
 
-
-        return $res;
+                    default:
+                        return $res['status'] = RESTConstants::HTTP_NOT_FOUND;
+                }
+            }
+        } else {
+            // TODO: ERROR HANDLING
+        }
     }
 
-    protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
-    {
-        // TODO: Implement handleCollectionRequest() method.
-        $res = [];
-        return $res;
-    }
-
-    protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
-    {
-        // TODO: Implement handleSubRequest() method.
-        $res = [];
-        return $res;
+    protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array {
+        return (new CustomerModel())->getCollection();
     }
 
     /**
      * @throws BadRequestException as other request handling methods
-     * @see ResourceController::doRetrieveResource
+     * @see CustomerModel::retrieveOrder()
      */
-    protected function retrieveOrderSince(string $filter): ?array {
-        //return (new CustomerModel()->retrieveOrderSince($filter));
-        $res = [];
-        return $res;
+    protected function retrieveOrder(string $order): ?array {
+        return (new CustomerModel())->retrieveOrder($order);
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     * @see CustomerModel::retrieveOrderSince()
+     */
+    protected function retrieveOrderSince(): ?array {
+        return (new CustomerModel())->retrieveOrderSince();
+    }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     * @see CustomerModel::placeOrder()
+     */
+    protected function placeOrder(): ?array {
+        return (new CustomerModel())->placeOrder();
+    }
+
+    /**
+     * @throws BadRequestException as other request handling methods
+     * @see CustomerModel::cancelOrder()
+     */
+    protected function cancelOrder(string $order): ?array {
+        return (new CustomerModel())->cancelOrder($order);
+    }
 }
