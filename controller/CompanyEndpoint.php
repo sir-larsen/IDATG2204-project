@@ -15,9 +15,12 @@ class CompanyEndpoint extends ResourceController
 
     public function __construct(string $employeeType)
     {   
+        parent::__construct();
         $this->employeeType = $employeeType;
         print($this->employeeType);
+
         //SETTING ALL ALLOWED METHODS AND REQUESTS HERE
+        
     }
 
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
