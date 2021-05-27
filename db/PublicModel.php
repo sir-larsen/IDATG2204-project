@@ -60,35 +60,21 @@ class PublicModel extends AbstractModel {
 
         return $res;
     }
-/*
-    function createResource(array $resource): array
-    {
-        $this->db->beginTransaction();
-        $rec = $this->verifyResource($resource, true);
-        if ($rec['code'] != RESTConstants::HTTP_OK) {
-            $this->db->rollBack();
-            if (isset($rec['detailCode'])) {
-                throw new BadRequestException($rec['code'], $rec['detailCode']);
-            } else {
-                throw new BadRequestException($rec['code']);
-            }
-        }
 
-        $res = array();
-        $query = 'INSERT INTO dealer (city, county_no) SELECT :city, no FROM county WHERE name = :name';
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':city', $resource['city']);
-        $stmt->bindValue(':name', $resource['county']);
-        $stmt->execute();
-
-        $res['id'] = intval($this->db->lastInsertId());
-        $res['city'] = $resource['city'];
-        $res['county'] = $resource['county'];
-        $this->db->commit();
-
-        return $res;
-    }*/
+    /**
+     * Returns the collection of resources from the database.
+     * @param array $query an optional set of conditions that the retrieved
+     *              resources need to meet - e.g., array('counties' => array('...', ...)) would
+     *              mean that only resources having make = Ford would be returned.
+     *  @param model The specified model of the ski the user wants to filter on.
+     *
+     * @return array an array of associative arrays of resource attributes. The
+     *               array will be empty if there are no resources to be returned.
+     * @throws BadRequestException in the case the request from the client is badly formatted or violates application
+     *         or database constraints.
+     * @throws BadRequestException
+     */
 
     function getModel(?array $query = null, string $model): array
     {
@@ -127,11 +113,24 @@ class PublicModel extends AbstractModel {
         return $res;
     }
 
+    /**
+     * Returns the collection of resources from the database.
+     * @param array $query an optional set of conditions that the retrieved
+     *              resources need to meet - e.g., array('counties' => array('...', ...)) would
+     *              mean that only resources having make = Ford would be returned.
+     *  @param grip The specified name of the gripsystem the user wants to filter on.
+     *
+     * @return array an array of associative arrays of resource attributes. The
+     *               array will be empty if there are no resources to be returned.
+     * @throws BadRequestException in the case the request from the client is badly formatted or violates application
+     *         or database constraints.
+     * @throws BadRequestException
+     */
 
-    function getGrip(?array $query = null, string $model): array
+    function getGrip(?array $query = null, string $grip): array
     {
         $res = [];
-        $fixed = str_replace("-", " ", $model);
+        $fixed = str_replace("-", " ", $grip);
         //Query to get all ski-models and exchanging attribute Id's for their actual names
         $query = "SELECT ski.product_no, ski.url, ski.msrpp, ski.historical AS in_production, ski_model.name AS model,
        grip_system.name AS grip, ski_type.name AS type, weight_class.min_weight AS min_weight,
