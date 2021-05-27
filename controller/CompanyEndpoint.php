@@ -16,6 +16,11 @@ class CompanyEndpoint extends ResourceController
      */
     public $employeeType;
 
+    /**
+     * @var array containing implemented requests
+     */
+    private $validSubRequests;
+
     public function __construct(string $employeeType)
     {   
         parent::__construct();
@@ -27,8 +32,12 @@ class CompanyEndpoint extends ResourceController
         $this->validRequests[DBConstants::EMPLOYEE_SKEEPER]  = RESTConstants::ENDPOINT_SKEEPER;
         $this->validRequests[DBConstants::EMPLOYEE_PPLANNER] = RESTConstants::ENDPOINT_PPLANNER;
 
+        //Setting the implemented sub requests
+        $this->validSubRequests[RESTConstants::ENDPOINT_CREP] = array();
+        $this->validSubRequests[RESTConstants::ENDPOINT_CREP][] = 'orders';
+
         //print_r($this->validRequests);
-        //TBD REMEMBER TO DECLARE VALID METHODS HERE!!!
+        //TBD REMEMBER TO DECLARE VALID METHODS HERE!!S
         
     }
 
@@ -48,7 +57,7 @@ class CompanyEndpoint extends ResourceController
 
         switch ($uri[0]) {
             case RESTConstants::ENDPOINT_CREP:
-
+                $this->customerRepHandlder(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
                 break;
             case RESTConstants::ENDPOINT_SKEEPER:
 
@@ -56,8 +65,6 @@ class CompanyEndpoint extends ResourceController
             case RESTConstants::ENDPOINT_PPLANNER:
 
                 break;
-            
-            //default: throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
         }
 
         /*//Collection request
@@ -77,22 +84,33 @@ class CompanyEndpoint extends ResourceController
                 //If not, throw error
             //Handle the resource request DORESOURCEREQUEST
         }*/
-        /*else if (count($uri) > 1) { //If this is a sub resource request, do what needs to be done here
-            //Check if valid method
-                //Handle possible error
-            //Forward to sub resource request
-        }*/
         
-        print_r($uri);
+        //print_r($uri);
         
         return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
         $res = array();
         return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN*/
     }
 
-    protected function customerRepHanlder(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
+    protected function customerRepHandlder(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
-        
+        if (count($uri) == 0)                                                           //If no further arguments applied, throw bad request error
+            throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
+        else {
+            $exists = false;
+            foreach ($this->validSubRequests[RESTConstants::ENDPOINT_CREP] as $item) {
+                //print($item . "BIG COK\n");
+                if ($item == $uri[0])
+                    $exists = true;
+            }
+            if (!$exists)
+                throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
+        }
+
+        if (count($uri) == 1)
+
+        //print("cock inside customer rep");
+        //print_r($uri);
         
         $res = array();
         return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN*/
