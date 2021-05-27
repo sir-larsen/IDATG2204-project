@@ -5,6 +5,11 @@ use function PHPUnit\Framework\throwException;
 require_once 'RESTConstants.php';
 require_once 'ResourceController.php';
 require_once 'errors.php';
+require_once 'db/CompanyModel.php';
+
+//http://localhost/api/company/customer_rep/orders?state=new,open,skis-avaliable,ready-to-be-shipped
+//http://localhost/api/company/customer_rep/orders?state=new,open,skis-avaliable
+//http://localhost/api/company/customer_rep/orders
 
 /**
  * Class CustomerEndpoint for customer requests
@@ -25,7 +30,6 @@ class CompanyEndpoint extends ResourceController
     {   
         parent::__construct();
         $this->employeeType = $employeeType; //Storing the employee type for later user checks
-        //print($this->employeeType);
 
         //SETTING ALL ALLOWED METHODS AND REQUESTS HERE
         $this->validRequests[DBConstants::EMPLOYEE_CREP]     = RESTConstants::ENDPOINT_CREP;
@@ -36,11 +40,22 @@ class CompanyEndpoint extends ResourceController
         $this->validSubRequests[RESTConstants::ENDPOINT_CREP] = array();
         $this->validSubRequests[RESTConstants::ENDPOINT_CREP][] = 'orders';
 
-        //print_r($this->validRequests);
         //TBD REMEMBER TO DECLARE VALID METHODS HERE!!S
         
     }
 
+    /**
+     * The main function handling the client request to this api endpoint.
+     * @param array $uri the part of the requested URI that is still to be processed after being exploded to an array.
+     * @param string $endpointPath the path to the current resource.
+     * @param string $requestMethod the method being requested.
+     * @param array $queries the query string from the client
+     * @param array $payload the JSON payload received from the client - after being decoded to an array structure
+     * @return array an associative array where the status is
+     *         one of the HTTP status codes indicating the success of the operation and result being the resource
+     *         representation to be returned to the client.
+     * @throws APIException in the case of resources not found, bad requests, methods not implemented, etc.
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         //Checking if user is trying to access only the company part
@@ -53,45 +68,32 @@ class CompanyEndpoint extends ResourceController
             }
             throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);       //Else throw a bad request error
         }
-        print("cock\n");
 
         switch ($uri[0]) {
             case RESTConstants::ENDPOINT_CREP:
-                $this->customerRepHandlder(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
+                return $this->customerRepHandlder(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
                 break;
             case RESTConstants::ENDPOINT_SKEEPER:
-
+                //Funksjonskall
                 break;
             case RESTConstants::ENDPOINT_PPLANNER:
-
+                //Funksjonskall
                 break;
         }
-
-        /*//Collection request
-        if (count($uri) == 0) { 
-            //Check if method is valid
-                //If not valid throw error
-                
-            //handle the collection request-- Which means actually getting it DOCOLLECTIONREQUEST
-            return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
-        }
-        else if (count($uri) == 1) { //At this point, either an ID or further endpoint specifications has been sent
-            if (!ctype_digit($uri[0])) { //This checks if there is an ID provided, or further sub requests in endpoint
-                //Inside is if it is a sub request HANDLE SUBREQUEST IN HERE!!!
-                //ERROR thrown in Rune example because it doesn't support sub-resources. e.g: localhost/customer/CHANGE_ORDER
-            }
-            //Check again if method is valid here
-                //If not, throw error
-            //Handle the resource request DORESOURCEREQUEST
-        }*/
-        
-        //print_r($uri);
-        
-        return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
-        $res = array();
-        return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN*/
     }
 
+    /**
+     * Secondaryb function handling calls to the customer_rep endpoint.
+     * @param array $uri the part of the requested URI that is still to be processed after being exploded to an array.
+     * @param string $endpointPath the path to the current resource.
+     * @param string $requestMethod the method being requested.
+     * @param array $queries the query string from the client
+     * @param array $payload the JSON payload received from the client - after being decoded to an array structure
+     * @return array an associative array where the status is
+     *         one of the HTTP status codes indicating the success of the operation and result being the resource
+     *         representation to be returned to the client.
+     * @throws APIException in the case of resources not found, bad requests, methods not implemented, etc.
+     */    
     protected function customerRepHandlder(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         if (count($uri) == 0)                                                           //If no further arguments applied, throw bad request error
@@ -99,7 +101,6 @@ class CompanyEndpoint extends ResourceController
         else {
             $exists = false;
             foreach ($this->validSubRequests[RESTConstants::ENDPOINT_CREP] as $item) {
-                //print($item . "BIG COK\n");
                 if ($item == $uri[0])
                     $exists = true;
             }
@@ -107,35 +108,90 @@ class CompanyEndpoint extends ResourceController
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
         }
 
-        if (count($uri) == 1)
-
-        //print("cock inside customer rep");
-        //print_r($uri);
-        
-        $res = array();
-        return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN*/
+        if (count($uri) == 1) {
+            switch ($uri[0]) {
+                case $this->validSubRequests[RESTConstants::ENDPOINT_CREP][0]:
+                    return $this->doOrderRequest($queries);
+                //case $this->validSubRequests[RESTConstants::ENDPOINT_CREP][0]:
+                    //TBD
+            }
+        }
     }
     
     protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
-        print("\n\n");
         $res = array();
-        $res['hoi'] = 5;
-        $res['Prompkus'] = 10;
-        $res['status'] = RESTConstants::HTTP_OK;
-        $res['result'] = array();
-        $res['result'][] = 5;
-        $res['result'][] = 'Prompkus';
-        $res['result'][] = 7;
-        $res['result'][] = 8;
-
-        
         return $res;
     }
 
     protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $res = array();
+        return $res;
+    }
+
+    /**
+     * The function handling the retrival of orders with query string on orders
+     * @param array $queries filter parameters being passed from the client
+     * @return array the collection of resources
+     */
+    protected function doOrderRequest(array $queries): array
+    {
+        //Filter set to null at first
+        $filter = null;
+        if (isset($queries['state'])) {                                 //If the state parameter is set
+            $processed = str_replace("-", " ", $queries['state']);
+            $filter = array();
+            $filter['state'] = preg_split('/[,][\s]*/', $processed);    //Process the string into an array
+
+            //Function for mapping values as are from API to how they would be in the database
+            foreach ($filter['state'] as $key => $item) {
+                switch ($item) {
+                    case 'new':
+                        $filter['state'][$key] = 1;
+                        break;
+                    case 'open':
+                        $filter['state'][$key] = 2;
+                        break;
+                    case 'skis avaliable':
+                        $filter['state'][$key] = 3;
+                        break;
+                    case 'ready to be shipped':
+                        $filter['state'][$key] = 4;
+                        break;
+                }
+            }
+        }
+
+        //Getting the response
+        $res = array();
+        $res['result'] = (new CompanyModel())->getOrders($filter);
+        if (count($res['result']) > 0) {
+            $res['status'] = RESTConstants::HTTP_OK;
+        } else {
+            throw new APIException(RESTConstants::HTTP_NOT_FOUND, "http://localhost/api/company/customer_rep/orders?state");
+        }
+
+        foreach ($res['result'] as $key => $items) { //Mapping over array to replace IDs with readable names
+            foreach ($items as $key2 => $item) {
+                if ($key2 == 'state_id') {
+                    switch ($item) {
+                        case 1:
+                            $res['result'][$key][$key2] = 'new';
+                            break;
+                        case 2:
+                            $res['result'][$key][$key2] = 'open';
+                            break;
+                        case 3:
+                            $res['result'][$key][$key2] = 'skis avaliable';
+                            break;
+                        case 4:
+                            $res['result'][$key][$key2] = 'ready to be shipped';
+                            break;
+                    }
+                }
+            }
+        }
         return $res;
     }
 }
