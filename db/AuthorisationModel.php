@@ -12,6 +12,8 @@ class AuthorisationModel extends DB
         parent::__construct();
     }
 
+    //public function getEmployeeType
+
     /**
      * Authorisation mechanism for checking if the user is an employee
      * @param string $token - The hash
