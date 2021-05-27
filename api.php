@@ -28,15 +28,10 @@ if (strlen($content) > 0) {
 }
 
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading the hash from the client trying to access
-
-print($token);
-
-//print($uri[0]);
  
 //Handle the request
 $controller = new APIController();
 try {
-    print($uri[0]);
     $employeeType = ''; //For keeping track of which type of employee to restrict which endpoints
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
