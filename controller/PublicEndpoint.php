@@ -3,6 +3,18 @@ require_once 'RESTConstants.php';
 require_once 'ResourceController.php';
 require_once 'errors.php';
 require_once 'db/PublicModel.php';
+/**
+ * To display all skis:
+ *  /api/public
+ *
+ * To filter based on model
+ * /api/public/model/{:model-name}
+ *
+ * To filter based on grip:
+ * /api/public/grip/{:grip-name}
+ *
+ */
+
 
 /**
  * Class PublicEndpoint for public requests
