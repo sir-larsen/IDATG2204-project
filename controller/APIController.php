@@ -68,6 +68,7 @@ class APIController extends RequestHandler
 
         //Checking if the request is valid here
         $endpointUri = $uri[0];
+
         if (!$this->isValidRequest($endpointUri)) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
         }
@@ -83,6 +84,7 @@ class APIController extends RequestHandler
                 $endpoint = new PublicEndpoint();
 
                 break;
+
 
             //LEGGE TIL FLERE CASER HER
         }

@@ -26,7 +26,11 @@ class PublicEndpoint extends ResourceController
             //handle the collection request-- Which means actually getting it DOCOLLECTIONREQUEST
             return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
         }
-        else if (count($uri) == 1) { //At this point, either an ID or further endpoint specifications has been sent
+        else if (count($uri) == 1) {
+
+            return $this->handleCollectionModel($endpointPath, $requestMethod, $queries, $payload, $uri[0]);
+
+
             if (!ctype_digit($uri[0])) { //This checks if there is an ID provided, or further sub requests in endpoint
                 //Inside is if it is a sub request HANDLE SUBREQUEST IN HERE!!!
                 //ERROR thrown in Rune example because it doesn't support sub-resources. e.g: localhost/customer/CHANGE_ORDER
@@ -48,6 +52,7 @@ class PublicEndpoint extends ResourceController
     {
         $model = new PublicModel();
 
+
         $res = array();
         try {
             switch ($requestMethod) {
@@ -59,9 +64,31 @@ class PublicEndpoint extends ResourceController
                         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
                     }
                     break;
-                case RESTConstants::METHOD_POST:
-                   // $res['result'] = $this->doCreateResource($payload);
-                    $res['status'] = RESTConstants::HTTP_CREATED;
+            }
+        } catch (BadRequestException $e) {
+            throw new BadRequestException($e->getCode(), $e->getDetailCode(), $endpointPath, $e->getMessage(), $e);
+        }
+        return $res;
+    }
+
+
+    public function handleCollectionModel(string $endpointPath, string $requestMethod, array $queries, array $payload, string $skimodel): array
+    {
+
+        $model = new PublicModel();
+        
+
+
+        $res = array();
+        try {
+            switch ($requestMethod) {
+                case RESTConstants::METHOD_GET:
+                    $res['result'] = $this->doRetrieveModel($queries, $skimodel);
+                    if (count($res['result']) > 0) {
+                        $res['status'] =  RESTConstants::HTTP_OK;
+                    } else {
+                        throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
+                    }
                     break;
             }
         } catch (BadRequestException $e) {
@@ -76,6 +103,11 @@ class PublicEndpoint extends ResourceController
         return (new PublicModel())->getCollection($filter);
     }
 
+    protected function doRetrieveModel(array $queries, string $model): array
+    {
+        $filter = null;
+        return (new PublicModel())->getModel($filter, $model);
+    }
 
     //protected function doCreateResource(array $payload): array
     //{

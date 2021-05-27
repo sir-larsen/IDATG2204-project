@@ -57,9 +57,16 @@ foreach ($res as $key => $value){
 
 print_r($res);
 */
-
+/*
 $public = new PublicEndpoint();
 
 $res = $public->handleCollectionRequest("", "", [], []);
 print_r($res);
+*/
+/*
+$public = new PublicModel();
 
+$res = $public->getModel(null,'endurance');
+
+print_r($res);
+*/
