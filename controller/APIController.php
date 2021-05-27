@@ -1,6 +1,7 @@
 <?php
 require_once 'PublicEndpoint.php';
 require_once 'RequestHandler.php';
+require_once 'CustomerEndpoint.php';
 require_once 'OrdersEndpoint.php';
 require_once 'CompanyEndpoint.php';
 require_once 'RESTConstants.php';
@@ -40,6 +41,7 @@ class APIController extends RequestHandler
         if (!(new AuthorisationModel())->isValid($token, $userType)) {
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
         }
+        return true;
     }
 
     /**
@@ -82,13 +84,12 @@ class APIController extends RequestHandler
                 break;
             case RESTConstants::ENDPOINT_PUBLIC:
                 $endpoint = new PublicEndpoint();
-
                 break;
-
-
-            //LEGGE TIL FLERE CASER HER
+            case RESTConstants::ENDPOINT_CUSTOMER:
+                $endpoint = new CustomerEndpoint();
+                break;
         }
-
+        
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
     }
 }

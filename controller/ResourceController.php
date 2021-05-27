@@ -44,22 +44,4 @@ abstract class ResourceController extends RequestHandler
         /*$res = array();
         return $res; //THIS IS JUST TO STOP INTELLISENSE RAGE; NOT A REAL RETURN
     }*/
-
-    /**
-     * The function handling the collection requests. The function is a dispatcher method that forwards the retrieval
-     * and create requests to the respective request handlers.
-     * @throws APIException as other request handling methods
-     * @throws BadRequestException as other request handling methods
-     * @see RequestHandler
-     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
-     * @see handleCreateResourceRequest for the handling of resource creation requests
-     */
-    //protected abstract function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array;
-
-    /**
-     * Function handling sub requests, forwarding to other functions if necessary.
-     * @see handleRequest
-     */
-    //protected abstract function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array;
-
 }
