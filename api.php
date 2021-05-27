@@ -29,8 +29,7 @@ if (strlen($content) > 0) {
 
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading the hash from the client trying to access
 
-//print($uri[0]);
- 
+
 //Handle the request
 $controller = new APIController();
 try { //Authorization mechanism for checking restricted endpoints
