@@ -37,14 +37,22 @@ print($token);
 $controller = new APIController();
 
 try {
+    print($uri[0]);
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
             $controller->authorise($token, DBConstants::CUSTOMER, RESTConstants::API_URI . '/');
+            //print("INNICUSTOMER");
+            break;
         case RESTConstants::ENDPOINT_TRANSPORTER:
+            //print("INNI TRANSPORTER");
             $controller->authorise($token, DBConstants::TRANSPORT, RESTConstants::API_URI . '/');
+            break;
         case RESTConstants::ENDPOINT_COMPANY:
+            //print("INNI COMPANY");
             $controller->authoriseEmployee($token, RESTConstants::API_URI . '/');
+            break;
     }
+    print("AUTHORIZED");
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
     //print_r($res);

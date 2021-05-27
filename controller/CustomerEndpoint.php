@@ -46,11 +46,15 @@ class CustomerEndpoint extends ResourceController {
     protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         // TODO: Implement handleCollectionRequest() method.
+        $res = [];
+        return $res;
     }
 
     protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         // TODO: Implement handleSubRequest() method.
+        $res = [];
+        return $res;
     }
 
     /**
@@ -59,6 +63,8 @@ class CustomerEndpoint extends ResourceController {
      */
     protected function retrieveOrderSince(string $filter): ?array {
         //return (new CustomerModel()->retrieveOrderSince($filter));
+        $res = [];
+        return $res;
     }
 
 

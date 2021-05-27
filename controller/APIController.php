@@ -1,5 +1,6 @@
 <?php
 require_once 'RequestHandler.php';
+REQUIRE_ONCE 'CustomerEndpoint.php';
 //require_once 'DealersEndpoint.php';
 //require_once 'UsedCarsEndpoint.php';
 //require_once 'ReportController.php';
@@ -39,9 +40,12 @@ class APIController extends RequestHandler
      * @throws APIException with the code set to HTTP_FORBIDDEN if the token is not valid
      */
     public function authorise(string $token, string $userType, string $endpointPath) {
-        if (!(new AuthorisationModel())->isValid($token, $userType)) {
+        /*if (!(new AuthorisationModel())->isValid($token, $userType)) {
+            print("NOT TRUE");
+            //return false;
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath);
         }
+        //return true;*/
     }
 
     /**

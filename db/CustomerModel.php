@@ -38,11 +38,11 @@ class CustomerModel extends AbstractModel {
         return $res;
     }
 
-    function retrieveOrderSince(array $filter): ?array {
+    /*function retrieveOrderSince(array $filter): ?array {
 
         $res = array();
 
         //$query = 'SELECT '
 
-    }
+    }*/
 }
