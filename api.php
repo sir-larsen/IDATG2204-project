@@ -33,7 +33,7 @@ $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : ''; //Reading 
 
 //Handle the request
 $controller = new APIController();
-try {
+try { //Authorization mechanism for checking restricted endpoints 
     switch ($uri[0]) {
         case RESTConstants::ENDPOINT_CUSTOMER:
             $controller->authorise($token, DBConstants::CUSTOMER, RESTConstants::API_URI . '/');
