@@ -28,6 +28,7 @@ class PublicModel extends AbstractModel {
     {
         $res = [];
 
+        //Query to get all ski-models and exchanging attribute Id's for their actual names
         $query = 'SELECT ski.product_no, ski.url, ski.msrpp, ski.historical AS in_production, ski_model.name AS model,
        grip_system.name AS grip, ski_type.name AS type, weight_class.min_weight AS min_weight,
        weight_class.max_weight AS max_weight, ski.size, ski.temp
@@ -40,8 +41,13 @@ class PublicModel extends AbstractModel {
         $stmt = $this->db->query($query);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $res[] = array('id' => intval($row['id']), 'start_date' => $row['start_date'], 'end_date' => $row['end_date'], 'customer_rep' => $row['customer_rep']);
+            $res[] = array('product_no' => intval($row['product_no']), 'url' => $row['url'], 'msrpp' => $row['msrpp'],
+                            'in_production' => $row['in_production'],'model' => $row['model'], 'grip' => $row['grip'],
+                        'type' => $row['type'], 'min_weight' => $row['min_weight'], 'max_weight' => $row['max_weight'],
+                        'size' => $row['size'], 'temp' => $row['temp'],);
         }
+
+
         return $res;
     }
 }
