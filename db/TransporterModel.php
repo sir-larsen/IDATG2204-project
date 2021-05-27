@@ -59,9 +59,37 @@ class TransporterModel extends AbstractModel
         return $res;
     }
 
-    //UPDATE `shipment` SET `state_id` = '2' WHERE `shipment`.`nr` = 1;
+    /**
+     * Returns the collection of resources from the database.
+     * @param array $query an optional set of conditions that the retrieved
+     *              resources need to meet - e.g., array('counties' => array('...', ...)) would
+     *              mean that only resources having make = Ford would be returned.
+     * @return array an array of associative arrays of resource attributes. The
+     *               array will be empty if there are no resources to be returned.
+     * @throws BadRequestException in the case the request from the client is badly formatted or violates application
+     *         or database constraints.
+     * @throws BadRequestException
+     */
     function updateShipment(?array $resource, string $id): array
     {
+
+        $shipment = $this->getShipments();
+        $action = 0;
+
+        foreach ($shipment as $value) {
+            if ($value['nr'] == $id) {
+                if ($value['state_id'] == '1'){
+                    $action = 1;
+                    break ;
+                }
+                else{
+                    $action = 2;
+                    break ;
+                }
+            }else{
+                $action = 3;
+            }
+        }
 
         $this->db->beginTransaction();
         $rec = $this->verifyNr($resource, true);
@@ -85,19 +113,22 @@ class TransporterModel extends AbstractModel
 
         $res['code'] = RESTConstants::HTTP_OK;
 
-        $shipment = $this->getShipments();
-
-        foreach ($shipment as $key => $value) {
-
-            if ($value['nr'] == $id) {
-                print("shipment nr: " . $id . " is set ready for shipping:" . "\n\n");
-                return $shipment;
-            }else{
-                print("shipment nr: " . $id . " is not registered in database:" . "\n\n");
-                throw new BadRequestException($rec['code']);
-            }
+        if ($action == 1){
+            print("shipment nr: " . $id . " is set ready for shipping:" . "\n\n");
+            return $shipment[$num-1];
         }
+        else if($action == 2){
+            print("shipment nr: " . $id . " is already ready for shipping:" . "\n\n");
+            return $shipment[$num-1];
+        }
+        else{
+            print("shipment nr: " . $id . " is not registered in database:" . "\n\n");
+            throw new BadRequestException($rec['code']);
+
+        }
+
     }
+
 
 
 
