@@ -78,6 +78,10 @@ class APIController extends RequestHandler
             case RESTConstants::ENDPOINT_COMPANY:
                 $endpoint = new CompanyEndpoint();
                 break;
+          //  case RESTConstants::ENDPOINT_PUBLIC;
+          //      $endpoint = new PublicEndpoint();
+          //      break;
+
             //LEGGE TIL FLERE CASER HER
         }
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
