@@ -47,6 +47,7 @@ try { //Authorization mechanism for checking restricted endpoints
             $employeeType = (new AuthorisationModel())->getEmployeeType($token);
             break;
     }
+
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload, $employeeType);
     //print_r($res);
