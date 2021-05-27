@@ -127,6 +127,44 @@ class PublicModel extends AbstractModel {
         return $res;
     }
 
+
+    function getGrip(?array $query = null, string $model): array
+    {
+        $res = [];
+        $fixed = str_replace("-", " ", $model);
+        //Query to get all ski-models and exchanging attribute Id's for their actual names
+        $query = "SELECT ski.product_no, ski.url, ski.msrpp, ski.historical AS in_production, ski_model.name AS model,
+       grip_system.name AS grip, ski_type.name AS type, weight_class.min_weight AS min_weight,
+       weight_class.max_weight AS max_weight, ski.size, ski.temp
+       FROM ski
+       INNER JOIN ski_model ON ski.model_id = ski_model.model_id
+       INNER JOIN grip_system ON ski.grip_id = grip_system.grip_id
+       INNER JOIN ski_type ON ski.type_id = ski_type.type_id
+       INNER JOIN weight_class ON ski.weight_id = weight_class.id WHERE grip_system.name = '".$fixed."'";
+
+        $stmt = $this->db->query($query);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[] = array('product_no' => intval($row['product_no']), 'url' => $row['url'], 'msrpp' => $row['msrpp'],
+                'in_production' => $row['in_production'],'model' => $row['model'], 'grip' => $row['grip'],
+                'type' => $row['type'], 'min_weight' => $row['min_weight'], 'max_weight' => $row['max_weight'],
+                'size' => $row['size'], 'temp' => $row['temp'],);
+        }
+
+        //Changes the status code for in production to either yes or no.
+
+        foreach ($res as $key => $value){
+
+            if ($value['in_production'] == 0){
+                $res[$key]['in_production'] = 'yes';
+            }else{
+                $res[$key]['in_production'] = 'no';
+            }
+
+        }
+        return $res;
+    }
+
 }
 
 

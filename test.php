@@ -66,7 +66,7 @@ print_r($res);
 /*
 $public = new PublicModel();
 
-$res = $public->getModel(null,'endurance');
+$res = $public->getGrip(null,'intelligrip');
 
 print_r($res);
 */
