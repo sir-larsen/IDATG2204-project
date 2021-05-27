@@ -82,11 +82,11 @@ $res = $public->getGrip(null,'intelligrip');
 print_r($res);
 */
 
-//$transporter = new TransporterModel();
+$transporter = new TransporterModel();
 
-//$res = $transporter->getCollection();
+$res = $transporter->getShipments();
 
-//print_r($res);
+print_r($res);
 
-$auth = new AuthorisationModel();
-print($auth->isValid('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132', DBConstants::TRANSPORT));
+//$auth = new AuthorisationModel();
+//print($auth->isValid('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132', DBConstants::TRANSPORT));

@@ -58,5 +58,88 @@ class TransporterModel extends AbstractModel
 
         return $res;
     }
+
+    //UPDATE `shipment` SET `state_id` = '2' WHERE `shipment`.`nr` = 1;
+    function updateShipment(?array $resource, string $id): array
+    {
+
+        $this->db->beginTransaction();
+        $rec = $this->verifyNr($resource, true);
+
+        if($rec['code'] != RESTConstants::HTTP_OK){
+            $this->db->rollBack();
+            if (isset($rec['detailCode'])) {
+                throw new BadRequestException($rec['code'], $rec['detailCode']);
+            }else {
+                throw new BadRequestException($rec['code']);
+            }
+        }
+
+        $num = intval($id);
+        $res = array();
+        $query = "UPDATE shipment SET state_id = 2 WHERE shipment.nr = '".$num."'";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $this->db->commit();
+
+        $res['code'] = RESTConstants::HTTP_OK;
+
+        $shipment = $this->getShipments();
+
+        foreach ($shipment as $key => $value) {
+
+            if ($value['nr'] == $id) {
+                print("shipment nr: " . $id . " is set ready for shipping:" . "\n\n");
+                return $shipment;
+            }else{
+                print("shipment nr: " . $id . " is not registered in database:" . "\n\n");
+                throw new BadRequestException($rec['code']);
+            }
+        }
+    }
+
+
+
+    function verifyNr(?array $resource, bool $ignoreId = false): array
+    {
+        $res = array();
+
+        if (!$ignoreId && !array_key_exists('nr', $resource)) {
+            $res['code'] = RESTConstants::DB_ERR_ATTRIBUTE_MISSING;
+            return $res;
+        }
+
+        $res['code'] = RESTConstants::HTTP_OK;
+
+        return $res;
+    }
+
+
+
+    function getShipments(?array $query = null): array
+    {
+
+        $res = [];
+
+        //Query to get all ski-models and exchanging attribute Id's for their actual names
+        $query = 'SELECT nr, pickup_date, company_name, driver_id, state_id,
+       address_id
+        FROM shipment';
+
+        $stmt = $this->db->query($query);
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[] = array('nr' => intval($row['nr']), 'pickup_date' => $row['pickup_date'], 'company_name' => $row['company_name'],
+                'driver_id' => $row['driver_id'], 'state_id' => $row['state_id'], 'address_id' => $row['address_id'],);
+        }
+
+        return $res;
+    }
+
 }
+
+
+
+
 
