@@ -1,8 +1,6 @@
 <?php
+require_once 'PublicEndpoint.php';
 require_once 'RequestHandler.php';
-//require_once 'DealersEndpoint.php';
-//require_once 'UsedCarsEndpoint.php';
-//require_once 'ReportController.php';
 require_once 'OrdersEndpoint.php';
 require_once 'CompanyEndpoint.php';
 require_once 'RESTConstants.php';
@@ -67,23 +65,28 @@ class APIController extends RequestHandler
      */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
+
         //Checking if the request is valid here
         $endpointUri = $uri[0];
         if (!$this->isValidRequest($endpointUri)) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
         }
 
+
         $endpointPath .= '/' . $uri[0];
+
         switch ($endpointUri) {
             case RESTConstants::ENDPOINT_COMPANY:
                 $endpoint = new CompanyEndpoint();
                 break;
-          //  case RESTConstants::ENDPOINT_PUBLIC;
-          //      $endpoint = new PublicEndpoint();
-          //      break;
+            case RESTConstants::ENDPOINT_PUBLIC:
+                $endpoint = new PublicEndpoint();
+
+                break;
 
             //LEGGE TIL FLERE CASER HER
         }
+
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
     }
 }

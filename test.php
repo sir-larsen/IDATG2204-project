@@ -8,6 +8,7 @@ require_once 'db/AuthorisationModel.php';
 require_once 'BadRequestException.php';
 require_once 'DBConstants.php';
 require_once 'db/PublicModel.php';
+require_once 'controller/PublicEndpoint.php';
 
 //$customer = new CustomerModel;
 
@@ -38,7 +39,7 @@ else
 //$auth = new AuthorisationModel;
 //print($auth->isEmployee('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132'));
 
-
+/*
 $public = new PublicModel;
 
 $res = $public->getCollection();
@@ -55,3 +56,10 @@ foreach ($res as $key => $value){
 
 
 print_r($res);
+*/
+
+$public = new PublicEndpoint();
+
+$res = $public->handleCollectionRequest("", "", [], []);
+print_r($res);
+

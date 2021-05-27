@@ -42,6 +42,7 @@ try {
         case RESTConstants::ENDPOINT_COMPANY:
             $controller->authoriseEmployee($token, RESTConstants::API_URI . '/');
     }
+
     //HERE SUPPOSED TO READ THE ENDPOINTS AND AUTHORIZE, TBD!!! REMEMBER TO DO
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
     //print_r($res);

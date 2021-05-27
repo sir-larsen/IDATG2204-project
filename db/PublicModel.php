@@ -50,4 +50,36 @@ class PublicModel extends AbstractModel {
 
         return $res;
     }
+/*
+    function createResource(array $resource): array
+    {
+        $this->db->beginTransaction();
+        $rec = $this->verifyResource($resource, true);
+        if ($rec['code'] != RESTConstants::HTTP_OK) {
+            $this->db->rollBack();
+            if (isset($rec['detailCode'])) {
+                throw new BadRequestException($rec['code'], $rec['detailCode']);
+            } else {
+                throw new BadRequestException($rec['code']);
+            }
+        }
+
+        $res = array();
+        $query = 'INSERT INTO dealer (city, county_no) SELECT :city, no FROM county WHERE name = :name';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':city', $resource['city']);
+        $stmt->bindValue(':name', $resource['county']);
+        $stmt->execute();
+
+        $res['id'] = intval($this->db->lastInsertId());
+        $res['city'] = $resource['city'];
+        $res['county'] = $resource['county'];
+        $this->db->commit();
+
+        return $res;
+    }*/
+
 }
+
+
