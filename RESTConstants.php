@@ -5,7 +5,7 @@
  */
 class RESTConstants
 {
-    const API_URI = 'http://localhost/api/v0.8';
+    const API_URI = 'http://localhost/api/v1';
 
     // HTTP method names
     const METHOD_GET = 'GET';
@@ -35,6 +35,10 @@ class RESTConstants
     const ENDPOINT_CUSTOMER = 'customer';
     const ENDPOINT_TRANSPORTER = 'transporter';
     const ENDPOINT_PUBLIC = 'public';
+
+    const ENDPOINT_CREP     = 'customer_rep';
+    const ENDPOINT_SKEEPER  = 'storekeeper';
+    const ENDPOINT_PPLANNER = 'production_planner';
 
 
     // Defined database errors
