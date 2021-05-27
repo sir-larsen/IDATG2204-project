@@ -8,12 +8,15 @@ require_once 'errors.php';
  */
 class CompanyEndpoint extends ResourceController
 {
-
+    /**
+     * @var string is a string holding the user type for the current user of the endpoint
+     */
     public $employeeType;
 
     public function __construct(string $employeeType)
     {   
         $this->employeeType = $employeeType;
+        print($this->employeeType);
         //SETTING ALL ALLOWED METHODS AND REQUESTS HERE
     }
 
