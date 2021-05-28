@@ -1,6 +1,47 @@
-# Project is not finished. Not worth reviewing yet
+# Database project 
+## How to install
+For the installation and deployment of this project you will need to use XAMPP.
+Clone the repo and move the files to C:\xampp\htdocs (for windows users). Make sure that the .htaccess files is in the root
+(htdocs/). Must also import the project.sql into phpmyadmin. Rename the project from 'idatg2204-project' to 'api'. Or modify the .htaccess file in regards to the name you want the
+project to use.
 
-# Api tests
+## Endpoints
+The four main endpoints of this API are:
+```
+http://localhost/api/company/
+http://localhost/api/customer/
+http://localhost/api/transporter/
+http://localhost/api/public/
+```
+Each one of them with their own functionality. Every endpoint, aside from /public, uses hashes to authorise users.
+These can be found here, and also in the project.sql file under the `auth_token` table. The hashes will need to be passed as 
+cookies when making requests, we suggest using Postman for this. As the service works now, there are five different hashes 
+required for the different endpoints, the /customer/ and /transport/ urls use a single hash each, while the company endpoint
+requires separate hashes for the different user-type subdirectories.
+
+Hashes for different endpoints:
+```
+//customer_rep
+7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51    //Customer_rep, storekeeper and production_planner hashes
+                                                                    //will all take 
+//storekeeper
+4b36a056eebfab7e4bbb26a278309812f55623b9675d4b4e9345f3fbf89e71d3
+
+//production_planner
+9d34402491a7e00f0ed216ed2f6ac63b2848ce41ad17a65bde2fffd47f7445c2
+
+//customer
+544c4686e64cdcdaba07ec71b4940122b0e9cc844d803d6cbc7282e139b08960
+
+//transport
+d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132
+```
+
+
+
+
+
+### Api test scheme
 
 ### Customer endpoints:
 | URI | Description of functionality | Purpose of test | Responsible | Time of implementation |
