@@ -25,7 +25,15 @@ class PublicEndpoint extends ResourceController
     {
 
     }
-
+    /**
+     * The main function handling the client request to the resource endpoint. Collection requests are forwarded to the
+     * handleCollectionRequest(), while resource requests are forwarded to the handleResourceRequest().
+     * @throws APIException as described in the superclass
+     * @throws BadRequestException as described in the superclass
+     * @see RequestHandler::handleRequest()
+     * @see handleCollectionRequest for the handling og collection requests
+     * @see handleResourceRequest for the handling of resource requests
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         //Collection request
@@ -54,6 +62,15 @@ class PublicEndpoint extends ResourceController
         return $res;
     }
 
+    /**
+     * The function handling the collection requests. The function is a dispatcher method that forwards the retrieval
+     * and create requests to the respective request handlers.
+     * @throws APIException as other request handling methods
+     * @throws BadRequestException as other request handling methods
+     * @see RequestHandler
+     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
+     * @see handleCreateResourceRequest for the handling of resource creation requests
+     */
     public function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $model = new PublicModel();
@@ -77,7 +94,15 @@ class PublicEndpoint extends ResourceController
         return $res;
     }
 
-
+    /**
+     * The function handling the collection based on model requests. The function is a dispatcher method that forwards the retrieval
+     * and create requests to the respective request handlers.
+     * @throws APIException as other request handling methods
+     * @throws BadRequestException as other request handling methods
+     * @see RequestHandler
+     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
+     * @see handleCreateResourceRequest for the handling of resource creation requests
+     */
     protected function handleCollectionModel(string $endpointPath, string $requestMethod, array $queries, array $payload, string $skimodel): array
     {
 
@@ -102,7 +127,15 @@ class PublicEndpoint extends ResourceController
     }
 
 
-
+    /**
+     * The function handling the collection based on grip requests. The function is a dispatcher method that forwards the retrieval
+     * and create requests to the respective request handlers.
+     * @throws APIException as other request handling methods
+     * @throws BadRequestException as other request handling methods
+     * @see RequestHandler
+     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
+     * @see handleCreateResourceRequest for the handling of resource creation requests
+     */
     protected function handleCollectionGrip(string $endpointPath, string $requestMethod, array $queries, array $payload, string $grip): array
     {
 
@@ -127,26 +160,40 @@ class PublicEndpoint extends ResourceController
     }
 
 
-
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function doRetrieveCollection(array $queries): array
     {
         $filter = null;
         return (new PublicModel())->getCollection($filter);
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function doRetrieveModel(array $queries, string $model): array
     {
         $filter = null;
         return (new PublicModel())->getModel($filter, $model);
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function doRetrieveGrip(array $queries, string $grip): array
     {
         $filter = null;
         return (new PublicModel())->getGrip($filter, $grip);
     }
 
-
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $res = array();

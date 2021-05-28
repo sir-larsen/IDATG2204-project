@@ -20,9 +20,18 @@ class TransporterEndpoint extends ResourceController
 {
     public function __construct()
     {
-        //SETTING ALL THE ALLOWED METHODS AND REQUESTS HERE
+
     }
 
+    /**
+     * The main function handling the client request to the resource endpoint. Collection requests are forwarded to the
+     * handleCollectionRequest(), while resource requests are forwarded to the handleResourceRequest().
+     * @throws APIException as described in the superclass
+     * @throws BadRequestException as described in the superclass
+     * @see RequestHandler::handleRequest()
+     * @see handleCollectionRequest for the handling og collection requests
+     * @see handleResourceRequest for the handling of resource requests
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
 
@@ -51,6 +60,15 @@ class TransporterEndpoint extends ResourceController
         return $res;
     }
 
+    /**
+     * The function handling the collection requests. The function is a dispatcher method that forwards the retrieval
+     * and create requests to the respective request handlers.
+     * @throws APIException as other request handling methods
+     * @throws BadRequestException as other request handling methods
+     * @see RequestHandler
+     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
+     * @see handleCreateResourceRequest for the handling of resource creation requests
+     */
     protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $model = new TransporterModel();
@@ -74,6 +92,16 @@ class TransporterEndpoint extends ResourceController
         return $res;
     }
 
+
+    /**
+     * The function handling the updating of shipment state requests. The function is a dispatcher method that forwards the retrieval
+     * and create requests to the respective request handlers.
+     * @throws APIException as other request handling methods
+     * @throws BadRequestException as other request handling methods
+     * @see RequestHandler
+     * @see handleRetrieveCollectionRequest for the handling of collection retrieval requests
+     * @see handleCreateResourceRequest for the handling of resource creation requests
+     */
     protected function handleCollectionPickup(string $endpointPath, string $requestMethod, array $queries, array $payload, string $id): array
     {
         $model = new TransporterModel();
@@ -100,18 +128,30 @@ class TransporterEndpoint extends ResourceController
         return $res;
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         $res = array();
         return $res;
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function doRetrieveCollection(array $queries): array
     {
         $filter = null;
         return (new TransporterModel())->getCollection($filter);
     }
 
+    /**
+     * @throws BadRequestException as other request handling methods
+     *
+     */
     protected function doUpdateState(array $queries, string $id): array
     {
 
