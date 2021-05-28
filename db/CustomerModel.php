@@ -160,7 +160,6 @@ class CustomerModel extends AbstractModel {
 
     function cancelOrder(string $order): ?array {
 
-        $this->db->beginTransaction();
         $rec = $this->verifyOrderID($order);
         if ($rec['code'] != RESTConstants::HTTP_OK) {
             $this->db->rollBack();
@@ -171,6 +170,9 @@ class CustomerModel extends AbstractModel {
             }
         }
 
+        $this->cancelOrderDetails($order);
+
+        $this->db->beginTransaction();
         $res = array();
         $query = 'DELETE FROM orders WHERE order_nr = :order';
 
@@ -182,6 +184,19 @@ class CustomerModel extends AbstractModel {
         $res['result'] = "Deleted order with number: " . $order;
         $this->db->commit();
         return $res;
+    }
+
+    function cancelOrderDetails(string $order) {
+        $this->db->beginTransaction();
+
+        $query = 'DELETE FROM order_details WHERE order_nr = :order';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':order', $order);
+
+        $stmt->execute();
+
+        $this->db->commit();
     }
 
     function totalCost(string $model, string $quantity): string {
@@ -215,7 +230,6 @@ class CustomerModel extends AbstractModel {
     }
 
     function verifyPayload(array $payload, bool $ignoreId = false): array {
-        print "In verifyPayload";
 
         $res = array();
 
