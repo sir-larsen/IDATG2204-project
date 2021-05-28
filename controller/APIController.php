@@ -7,7 +7,7 @@ require_once 'CompanyEndpoint.php';
 require_once 'RESTConstants.php';
 require_once 'db/AuthorisationModel.php';
 require_once 'errors.php';
-
+require_once 'TransporterEndpoint.php';
 /**
  * Class APIController this is the main controller for the API - it is just a dispatcher forwarding the requests to
  *       the DealersEndpoint, UsedCarsEndpoint, or ReportController depending on the what endpoint is addressed
@@ -88,6 +88,14 @@ class APIController extends RequestHandler
             case RESTConstants::ENDPOINT_CUSTOMER:
                 $endpoint = new CustomerEndpoint();
                 break;
+            case RESTConstants::ENDPOINT_TRANSPORTER:
+                $endpoint = new TransporterEndpoint();
+
+                break;
+
+
+
+            //LEGGE TIL FLERE CASER HER
         }
         
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
