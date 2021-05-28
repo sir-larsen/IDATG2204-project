@@ -1,5 +1,5 @@
 <?php
-
+require_once 'Authorisation.php';
 class ApiCest
 {
     public function _before(ApiTester $I)
@@ -42,6 +42,22 @@ class ApiCest
             'grip' => 'wax', 'type' => 'skate', 'min_weight' => '20', 'max_weight' => '30', 'size' => '135', 'temp' => 'cold'), );
     }
 
+
+    //Testing that the transporter endpoint is accessible with token
+    /*
+    public function testTransporterGetCollection(ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        Authorisation::setAuthorisationToken($I);
+        $I->sendGet('http://localhost/idatg2204-project/transporter');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+
+        $I->assertEquals(1, count(json_decode($I->grabResponse())));
+
+    }
+*/
+    //!!!!!getClient() missing from generated file in Authorisation.php
 
 
     //---------------------------------Security Tests---------------------------------------------------------------
