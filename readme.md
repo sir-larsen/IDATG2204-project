@@ -19,11 +19,11 @@ cookies when making requests, we suggest using Postman for this. As the service 
 required for the different endpoints, the /customer/ and /transport/ urls use a single hash each, while the company endpoint
 requires separate hashes for the different user-type subdirectories.
 
-Hashes for different endpoints:
+### Hashes for different endpoints:
 ```
 //customer_rep
-7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51    //Customer_rep, storekeeper and production_planner hashes
-                                                                    //will all take 
+7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51    
+                                                                   
 //storekeeper
 4b36a056eebfab7e4bbb26a278309812f55623b9675d4b4e9345f3fbf89e71d3
 
@@ -35,11 +35,375 @@ Hashes for different endpoints:
 
 //transport
 d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132
+
+Customer_rep, storekeeper and production_planner hashes will all take you through the
+first authorization check to the /company/ endpoint, however you will need the correct employee
+type hash for further endpoints down /company paths.
 ```
 
+## The company endpoint
+### METHOD GET
+#### http://localhost/api/company/customer_rep/orders?state={:order_state}
+#### http://localhost/api/company/customer_rep/orders?state=new,open,skis-avaliable,ready-to-be-shipped
+```
+Endpoint for customer_rep to get orders based on order states. States are passed in query string. 
+http://localhost/api/company/customer_rep/orders?state={:order_state}                                    
 
+example usage:
+http://localhost/api/company/customer_rep/orders?state=new,open,skis-avaliable,ready-to-be-shipped
 
+Response:
+[
+    {
+        "order_nr": 1,
+        "state_id": "new",
+        "parent_id": 0,
+        "total_price": 0,
+        "customer_id": 2,
+        "customer_rep": 1,
+        "date_placed": "2021-03-15"
+    },
+    {
+        "order_nr": 2,
+        "state_id": "new",
+        "parent_id": 0,
+        "total_price": 0,
+        "customer_id": 1,
+        "customer_rep": 1,
+        "date_placed": "2021-05-10"
+    }
+]       
+```
+### METHOD POST
+#### http://localhost/api/company/customer_rep/orders/{:employee_nr}/{:order_nr}
+ With JSON body: { "new_state": "order_state" }
+#### http://localhost/api/company/customer_rep/orders/1/2
+ With JSON body: { "new_state": "skis avaliable" }
+```
+Endpoint for customer_reps to change the order state.
+http://localhost/api/company/customer_rep/orders/{:employee_nr}/{:order_nr} POST { "new_state": {:order_state} }
 
+Example usage:
+http://localhost/api/company/customer_rep/orders/1/2 { "new_state": "open" }
+
+Example response:
+{
+    "status": 200,
+    "result": {
+        "order_nr": 2,
+        "customer_rep": 1,
+        "state": "skis avaliable"
+    }
+}
+```
+
+## The public endpoint
+### METHOD GET
+#### http://localhost/api/public
+
+```
+Endpoint for everyone to display all the different skis that the company offers.  
+http://localhost/api/public                                
+
+example usage:
+http://localhost/api/public     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    },
+    {
+        "product_no": 2,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Race Pro",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "30",
+        "max_weight": "40",
+        "size": "140",
+        "temp": "cold"
+    },
+    {
+        "product_no": 3,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Active Pro",
+        "grip": "IntelliGrip",
+        "type": "skate",
+        "min_weight": "40",
+        "max_weight": "50",
+        "size": "150",
+        "temp": "cold"
+    }
+]       
+```
+
+### METHOD GET
+#### http://localhost/api/public/model/{:model_name}
+
+```
+Endpoint for everyone to filter all the different skis based on model.  
+http://localhost/api/public/model/{:model_name}                                
+
+example usage:
+http://localhost/api/public/model/Endurance     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    }
+]       
+```
+
+### METHOD GET
+#### http://localhost/api/public/grip/{:grip_name}
+
+```
+Endpoint for everyone to filter all the different skis based on grip type.  
+http://localhost/api/public/grip/{:grip_name}                                
+
+example usage:
+http://localhost/api/public/grip/wax     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    },
+    {
+        "product_no": 2,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Race Pro",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "30",
+        "max_weight": "40",
+        "size": "140",
+        "temp": "cold"
+    }
+]       
+```
+## The transporter endpoint
+### METHOD GET
+#### http://localhost/api/transporter
+
+```
+Endpoint for transporter to display all orders ready for pickup.
+ http://localhost/api/transporter                                    
+
+example usage:
+ http://localhost/api/transporter
+
+Response:
+[
+    {
+        "order_nr": 1,
+        "state": "ready to be shipped",
+        "parent_id": "Not a sub-order",
+        "total_price": "No price information received",
+        "customer_id": "2",
+        "customer_rep": "Maximiliano Zakarias",
+        "date_placed": "2021-03-15"
+    }
+]
+```
+### METHOD GET
+#### http://localhost/api/transporter/pickedup/{:shipment_nr}
+
+```
+Endpoint for transporter to update shipments ready for shipping to picked up.
+Updates the database with new state_id.
+http://localhost/api/transporter/pickedup/{:shipment_nr}                                   
+
+example usage:
+ http://localhost/api/transporter/pickedup/1
+
+Response:
+[
+    shipment nr: 1 is set ready for shipping: {
+    "nr": 1,
+    "pickup_date": "2021-04-05",
+    "company_name": "postnord",
+    "driver_id": "1",
+    "state_id": "1",
+    "address_id": "1"
+}
+]
+```
+
+## Customer endpoint
+
+### METHOD GET
+```
+Endpoint for retrieving a list of all customers.
+http://localhost/api/customer
+
+Example response:
+[
+    {
+        "id": 1,
+        "start_date": "2020-01-01",
+        "end_date": "2021-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 2,
+        "start_date": "2020-02-02",
+        "end_date": "2021-02-02",
+        "customer_rep": "1"
+    },
+    {
+        "id": 3,
+        "start_date": "2019-01-01",
+        "end_date": "2020-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 4,
+        "start_date": "2017-01-01",
+        "end_date": "2021-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 5,
+        "start_date": "2018-04-27",
+        "end_date": "2021-02-14",
+        "customer_rep": "1"
+    }
+]
+```
+
+### METHOD GET
+```
+Endpoint for retrieving a specific order based on its unique id.
+http://localhost/api/customer/{:customer_id}/{order_nr}
+
+Example response:
+[
+    {
+        "order_nr": 2,
+        "order_state": "new",
+        "customer_id": "1",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-10"
+    }
+]
+```
+
+### METHOD GET
+```
+Endpoint for retrieving all orders placed since a specific date.
+http://localhost/api/customer/{:customer_id}/orders?since={:yyyy-mm-dd}
+
+Example response:
+[
+    {
+        "order_nr": 2,
+        "order_state": "new",
+        "customer_id": "1",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-10"
+    },
+    {
+        "order_nr": 3,
+        "order_state": "new",
+        "customer_id": "3",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-24"
+    },
+    {
+        "order_nr": 4,
+        "order_state": "new",
+        "customer_id": "4",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-04-11"
+    },
+    {
+        "order_nr": 5,
+        "order_state": "new",
+        "customer_id": "4",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-04-28"
+    }
+]
+```
+
+### METHOD POST
+```
+Endpoint for creating a new order.
+http://localhost/api/customer/{:customer_id}/placeorder
+
+Example request:
+{
+    "state_id": 1
+    "parent_id": 1
+    "customer_id": 3
+    "customer_rep": 2
+    "model": 2
+    "quantity": 1
+}
+
+Example response:
+{
+    "id": 8,
+    "state_id": "1",
+    "parent_id": "1",
+    "total_price": "1700",
+    "customer_id": "3",
+    "customer_rep": "2"
+}
+```
+
+### METHOD DELETE
+```
+Endpoint for canceling an order based on its unique id.
+http://localhost/api/customer/cancel_order/{order_nr}
+
+Example response:
+"Deleted order with number: 8"
+```
 
 ### Api test scheme
 
