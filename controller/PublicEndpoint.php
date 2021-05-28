@@ -23,7 +23,7 @@ class PublicEndpoint extends ResourceController
 {
     public function __construct()
     {
-
+        parent::__construct();
     }
     /**
      * The main function handling the client request to the resource endpoint. Collection requests are forwarded to the

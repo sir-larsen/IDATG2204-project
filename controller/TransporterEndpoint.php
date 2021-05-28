@@ -6,7 +6,7 @@ require_once 'db/TransporterModel.php';
 
 /**
  * To display all orders ready for pickup:
- *  /api/transporters
+ *  /api/transporter
  *
  * Update a shipments state from ready for pickup to picked up:
  * /api/transporter/pickedup/{:shipment_nr}
