@@ -11,6 +11,9 @@ require_once 'db/CompanyModel.php';
 //http://localhost/api/company/customer_rep/orders?state=new,open,skis-avaliable
 //http://localhost/api/company/customer_rep/orders
 
+//POST request
+//company/customer_rep/orders{:employee_nr}/{:order_number}/{:new_state}
+
 /**
  * Class CustomerEndpoint for customer requests
  */
@@ -115,6 +118,15 @@ class CompanyEndpoint extends ResourceController
                 //case $this->validSubRequests[RESTConstants::ENDPOINT_CREP][0]:
                     //TBD
             }
+        }
+        if (!ctype_digit($uri[1])) {
+            throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
+        }
+        else {
+            print($uri[1]);
+            print("\n");
+            print_r($payload);
+
         }
     }
     
