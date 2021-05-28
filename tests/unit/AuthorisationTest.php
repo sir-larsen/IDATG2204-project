@@ -1,6 +1,7 @@
 <?php
 
 require_once 'RESTConstants.php';
+require_once 'controller/APIController.php';
 
 class AuthorisationTest extends \Codeception\Test\Unit {
 
