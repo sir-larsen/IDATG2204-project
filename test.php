@@ -114,7 +114,7 @@ else
     echo "false\n";
 
 */
-echo "\n\n";
+/*echo "\n\n";
 
 $authCheck = $auth->isValid('7f38212946ddbd7aadba90192887c5538328bb77bf3756504a1e538226fa8f51', DBConstants::EMPLOYEE_CREP);
 if ($authCheck)
@@ -152,3 +152,13 @@ print_r($res);
 
 //$auth = new AuthorisationModel();
 //print($auth->isValid('d8af1f1d29016d1c4b13954d6a605a62b511c88f8f35539a3efd97547e925132', DBConstants::TRANSPORT));
+*/
+$comp = new CompanyModel();
+//print($comp->isStateExisting("ready to be shipped"));
+
+//print($comp->isEmployeeExisting(4));
+
+//print($comp->isOrderExisting(7));
+
+$arr = $comp->getState(1);
+print_r($arr);

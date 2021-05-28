@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 25. Mai, 2021 20:56 PM
+-- Generation Time: 28. Mai, 2021 07:42 AM
 -- Tjener-versjon: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -212,8 +212,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_nr`, `state_id`, `parent_id`, `total_price`, `customer_id`, `customer_rep`, `date_placed`) VALUES
-(1, 4, NULL, NULL, 2, 1, '2021-03-15'),
-(2, 1, NULL, NULL, 1, 1, '2021-05-10'),
+(1, 1, NULL, NULL, 2, 1, '2021-03-15'),
+(2, 2, NULL, NULL, 1, 1, '2021-05-10'),
 (3, 1, NULL, NULL, 3, 1, '2021-05-24'),
 (4, 1, NULL, NULL, 4, 1, '2021-04-11'),
 (5, 1, 2, NULL, 4, 1, '2021-04-28');
@@ -250,17 +250,21 @@ INSERT INTO `order_details` (`order_nr`, `model`, `quantity`) VALUES
 CREATE TABLE `order_history` (
   `order_nr` int(11) NOT NULL,
   `employee` int(80) NOT NULL,
-  `old_state` int(50) NOT NULL
+  `old_state` int(50) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dataark for tabell `order_history`
 --
 
-INSERT INTO `order_history` (`order_nr`, `employee`, `old_state`) VALUES
-(1, 1, 1),
-(1, 1, 2),
-(1, 1, 3);
+INSERT INTO `order_history` (`order_nr`, `employee`, `old_state`, `id`) VALUES
+(1, 1, 1, 1),
+(1, 1, 2, 2),
+(2, 1, 1, 9),
+(2, 1, 2, 10),
+(2, 1, 3, 11),
+(2, 1, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -619,8 +623,8 @@ ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_nr`),
   ADD KEY `orders_fk3` (`state_id`),
   ADD KEY `orders_orders_fk5` (`parent_id`),
-  ADD KEY `orders_orders_fkfk` (`customer_id`),
-  ADD KEY `orders_orders_fkfk2` (`customer_rep`);
+  ADD KEY `orders_orders_fkfk2` (`customer_rep`),
+  ADD KEY `orders_orders_fkfk` (`customer_id`);
 
 --
 -- Indexes for table `order_details`
@@ -633,9 +637,10 @@ ALTER TABLE `order_details`
 -- Indexes for table `order_history`
 --
 ALTER TABLE `order_history`
-  ADD PRIMARY KEY (`order_nr`,`employee`,`old_state`),
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_history_fk` (`order_nr`),
   ADD KEY `order_history_fk2` (`employee`),
-  ADD KEY `order_history_fkfk3` (`old_state`);
+  ADD KEY `order_history_fk3` (`old_state`);
 
 --
 -- Indexes for table `order_state`
@@ -766,10 +771,16 @@ ALTER TABLE `orders`
   MODIFY `order_nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `order_history`
+--
+ALTER TABLE `order_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `production_plan`
 --
 ALTER TABLE `production_plan`
-  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `nr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `shipment`
@@ -838,7 +849,7 @@ ALTER TABLE `individual_store`
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_fk3` FOREIGN KEY (`state_id`) REFERENCES `order_state` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_orders_fk5` FOREIGN KEY (`parent_id`) REFERENCES `orders` (`order_nr`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_orders_fkfk` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  ADD CONSTRAINT `orders_orders_fkfk` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_orders_fkfk2` FOREIGN KEY (`customer_rep`) REFERENCES `employee` (`nr`);
 
 --
@@ -852,9 +863,9 @@ ALTER TABLE `order_details`
 -- Begrensninger for tabell `order_history`
 --
 ALTER TABLE `order_history`
-  ADD CONSTRAINT `order_history_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`),
-  ADD CONSTRAINT `order_history_fk2` FOREIGN KEY (`employee`) REFERENCES `employee` (`nr`),
-  ADD CONSTRAINT `order_history_fkfk3` FOREIGN KEY (`old_state`) REFERENCES `order_state` (`id`);
+  ADD CONSTRAINT `order_history_fk` FOREIGN KEY (`order_nr`) REFERENCES `orders` (`order_nr`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_history_fk2` FOREIGN KEY (`employee`) REFERENCES `employee` (`nr`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_history_fk3` FOREIGN KEY (`old_state`) REFERENCES `order_state` (`id`) ON UPDATE CASCADE;
 
 --
 -- Begrensninger for tabell `production_plan`

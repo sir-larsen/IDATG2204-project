@@ -41,10 +41,12 @@ class CompanyEndpoint extends ResourceController
 
         //Setting the implemented sub requests
         $this->validSubRequests[RESTConstants::ENDPOINT_CREP] = array();
-        $this->validSubRequests[RESTConstants::ENDPOINT_CREP][] = 'orders';
+        $this->validSubRequests[RESTConstants::ENDPOINT_CREP][] = RESTConstants::SUB_ENDPOINT_ORDERS;
 
-        //TBD REMEMBER TO DECLARE VALID METHODS HERE!!S
-        
+        //Defining the allowed methods for endpoints
+        $this->validMethods[RESTConstants::SUB_ENDPOINT_ORDERS] = array();
+        $this->validMethods[RESTConstants::SUB_ENDPOINT_ORDERS][RESTConstants::METHOD_GET] = RESTConstants::HTTP_OK;
+        $this->validMethods[RESTConstants::SUB_ENDPOINT_ORDERS][RESTConstants::METHOD_POST] = RESTConstants::HTTP_OK;
     }
 
     /**
@@ -112,6 +114,9 @@ class CompanyEndpoint extends ResourceController
         }
 
         if (count($uri) == 1) {
+            if (($outcome = $this->isValidMethod(RESTConstants::SUB_ENDPOINT_ORDERS, $requestMethod)) != RESTConstants::HTTP_OK) {
+                throw new APIException($outcome, $endpointPath . '/' . $uri[0]); //Checking if method is allowed for sub endpoint
+            }
             switch ($uri[0]) {
                 case $this->validSubRequests[RESTConstants::ENDPOINT_CREP][0]:
                     return $this->doOrderRequest($queries);
@@ -119,27 +124,40 @@ class CompanyEndpoint extends ResourceController
                     //TBD
             }
         }
-        if (!ctype_digit($uri[1])) {
+        elseif (count($uri) == 3) { //Updating the resource
+            if (!ctype_digit($uri[1]) ||  !ctype_digit($uri[2]))
+                throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
+            if (($outcome = $this->isValidMethod(RESTConstants::SUB_ENDPOINT_ORDERS, $requestMethod)) != RESTConstants::HTTP_OK) {
+                throw new APIException($outcome, $endpointPath . '/' . $uri[0]); //Checking if method is allowed for sub endpoint
+            }
+            
+            $res = array();
+            $res['result'] = $this->doUpdateState($uri[1], $uri[2], $payload);
+            $res['status'] = RESTConstants::HTTP_OK;
+            return $res;
+        }
+        else
             throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath);
-        }
-        else {
-            print($uri[1]);
-            print("\n");
-            print_r($payload);
-
-        }
     }
     
-    protected function handleCollectionRequest(string $endpointPath, string $requestMethod, array $queries, array $payload): array
+    /**
+     * Checks whether the method call is valid for the given resource request/controller.
+     * @param string $request the requested resource
+     * @param string $method the method to check
+     * @return int the HTTP status code indicating whether the method is OK, NOT IMPLEMENTED or NOT ALLOWED on the
+     *         requested resource/controller
+     */
+    public function isValidMethod(string $request, string $method): int
     {
-        $res = array();
-        return $res;
+        if (key_exists($request, $this->validMethods) && key_exists($method, $this->validMethods[$request])) {
+            return $this->validMethods[$request][$method];
+        }
+        return RESTConstants::HTTP_METHOD_NOT_ALLOWED;
     }
 
-    protected function handleSubRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
+    protected function doUpdateState(int $employeeNr, int $orderNr, array $payload)
     {
-        $res = array();
-        return $res;
+        return (new CompanyModel())->updateState($employeeNr, $orderNr, $payload);
     }
 
     /**
