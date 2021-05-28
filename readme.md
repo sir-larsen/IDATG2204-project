@@ -268,12 +268,142 @@ Response:
 ]
 ```
 
+## Customer endpoint
 
+### METHOD GET
+```
+Endpoint for retrieving a list of all customers.
+http://localhost/api/customer
 
+Example response:
+[
+    {
+        "id": 1,
+        "start_date": "2020-01-01",
+        "end_date": "2021-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 2,
+        "start_date": "2020-02-02",
+        "end_date": "2021-02-02",
+        "customer_rep": "1"
+    },
+    {
+        "id": 3,
+        "start_date": "2019-01-01",
+        "end_date": "2020-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 4,
+        "start_date": "2017-01-01",
+        "end_date": "2021-01-01",
+        "customer_rep": "1"
+    },
+    {
+        "id": 5,
+        "start_date": "2018-04-27",
+        "end_date": "2021-02-14",
+        "customer_rep": "1"
+    }
+]
+```
 
+### METHOD GET
+```
+Endpoint for retrieving a specific order based on its unique id.
+http://localhost/api/customer/{:customer_id}/{order_nr}
 
+Example response:
+[
+    {
+        "order_nr": 2,
+        "order_state": "new",
+        "customer_id": "1",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-10"
+    }
+]
+```
 
+### METHOD GET
+```
+Endpoint for retrieving all orders placed since a specific date.
+http://localhost/api/customer/{:customer_id}/orders?since={:yyyy-mm-dd}
 
+Example response:
+[
+    {
+        "order_nr": 2,
+        "order_state": "new",
+        "customer_id": "1",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-10"
+    },
+    {
+        "order_nr": 3,
+        "order_state": "new",
+        "customer_id": "3",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-05-24"
+    },
+    {
+        "order_nr": 4,
+        "order_state": "new",
+        "customer_id": "4",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-04-11"
+    },
+    {
+        "order_nr": 5,
+        "order_state": "new",
+        "customer_id": "4",
+        "customer_rep": "Maximiliano Zakarias",
+        "total_price": null,
+        "date_placed": "2021-04-28"
+    }
+]
+```
+
+### METHOD POST
+```
+Endpoint for creating a new order.
+http://localhost/api/customer/{:customer_id}/placeorder
+
+Example request:
+{
+    "state_id": 1
+    "parent_id": 1
+    "customer_id": 3
+    "customer_rep": 2
+    "model": 2
+    "quantity": 1
+}
+
+Example response:
+{
+    "id": 8,
+    "state_id": "1",
+    "parent_id": "1",
+    "total_price": "1700",
+    "customer_id": "3",
+    "customer_rep": "2"
+}
+```
+
+### METHOD DELETE
+```
+Endpoint for canceling an order based on its unique id.
+http://localhost/api/customer/cancel_order/{order_nr}
+
+Example response:
+"Deleted order with number: 8"
+```
 
 ### Api test scheme
 
