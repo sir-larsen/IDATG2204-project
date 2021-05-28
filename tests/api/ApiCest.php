@@ -30,7 +30,7 @@ class ApiCest
 
     }
     //Testing that the right format is displayed using the "filter by model" endpoint
-    public function testPublicWithFilter(ApiTester $I)
+    public function testPublicWithModelFilter(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendGet('http://localhost/idatg2204-project/public/model/Endurance');
@@ -40,6 +40,19 @@ class ApiCest
         $I->assertEquals(1, count(json_decode($I->grabResponse())));
         $I->seeResponseContainsJson(array('product_no' => 1, 'url' => null, 'msrpp' => '1700', 'in_production' => 'yes', 'model' => 'Endurance',
             'grip' => 'wax', 'type' => 'skate', 'min_weight' => '20', 'max_weight' => '30', 'size' => '135', 'temp' => 'cold'), );
+    }
+
+    //Testing that the right format is displayed using the "filter by grip" endpoint
+    public function testPublicWithGripFilter(ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendGet('http://localhost/idatg2204-project/public/grip/intelligrip');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+
+        $I->assertEquals(1, count(json_decode($I->grabResponse())));
+        $I->seeResponseContainsJson(array('product_no' => 3, 'url' => null, 'msrpp' => '1700', 'in_production' => 'yes', 'model' => 'Active Pro',
+            'grip' => 'IntelliGrip', 'type' => 'skate', 'min_weight' => '40', 'max_weight' => '50', 'size' => '150', 'temp' => 'cold'), );
     }
 
 
