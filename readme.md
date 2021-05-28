@@ -97,6 +97,180 @@ Example response:
 }
 ```
 
+## The public endpoint
+### METHOD GET
+#### http://localhost/api/public
+
+```
+Endpoint for everyone to display all the different skis that the company offers.  
+http://localhost/api/public                                
+
+example usage:
+http://localhost/api/public     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    },
+    {
+        "product_no": 2,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Race Pro",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "30",
+        "max_weight": "40",
+        "size": "140",
+        "temp": "cold"
+    },
+    {
+        "product_no": 3,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Active Pro",
+        "grip": "IntelliGrip",
+        "type": "skate",
+        "min_weight": "40",
+        "max_weight": "50",
+        "size": "150",
+        "temp": "cold"
+    }
+]       
+```
+
+### METHOD GET
+#### http://localhost/api/public/model/{:model_name}
+
+```
+Endpoint for everyone to filter all the different skis based on model.  
+http://localhost/api/public/model/{:model_name}                                
+
+example usage:
+http://localhost/api/public/model/Endurance     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    }
+]       
+```
+
+### METHOD GET
+#### http://localhost/api/public/grip/{:grip_name}
+
+```
+Endpoint for everyone to filter all the different skis based on grip type.  
+http://localhost/api/public/grip/{:grip_name}                                
+
+example usage:
+http://localhost/api/public/grip/wax     
+
+Response:
+[
+    {
+        "product_no": 1,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Endurance",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "20",
+        "max_weight": "30",
+        "size": "135",
+        "temp": "cold"
+    },
+    {
+        "product_no": 2,
+        "url": null,
+        "msrpp": "1700",
+        "in_production": "yes",
+        "model": "Race Pro",
+        "grip": "wax",
+        "type": "skate",
+        "min_weight": "30",
+        "max_weight": "40",
+        "size": "140",
+        "temp": "cold"
+    }
+]       
+```
+## The transporter endpoint
+### METHOD GET
+#### http://localhost/api/transporter
+
+```
+Endpoint for transporter to display all orders ready for pickup.
+ http://localhost/api/transporter                                    
+
+example usage:
+ http://localhost/api/transporter
+
+Response:
+[
+    {
+        "order_nr": 1,
+        "state": "ready to be shipped",
+        "parent_id": "Not a sub-order",
+        "total_price": "No price information received",
+        "customer_id": "2",
+        "customer_rep": "Maximiliano Zakarias",
+        "date_placed": "2021-03-15"
+    }
+]
+```
+### METHOD GET
+#### http://localhost/api/transporter/pickedup/{:shipment_nr}
+
+```
+Endpoint for transporter to update shipments ready for shipping to picked up.
+Updates the database with new state_id.
+http://localhost/api/transporter/pickedup/{:shipment_nr}                                   
+
+example usage:
+ http://localhost/api/transporter/pickedup/1
+
+Response:
+[
+    shipment nr: 1 is set ready for shipping: {
+    "nr": 1,
+    "pickup_date": "2021-04-05",
+    "company_name": "postnord",
+    "driver_id": "1",
+    "state_id": "1",
+    "address_id": "1"
+}
+]
+```
+
+
+
+
 
 
 
