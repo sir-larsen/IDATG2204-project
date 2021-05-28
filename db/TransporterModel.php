@@ -131,7 +131,18 @@ class TransporterModel extends AbstractModel
 
 
 
-
+    /**
+     * Checks the format of the resource array to see that it satisfy the database schema. The test will only verify the
+     * presence and type of the number representing shipments.
+     * @param array $resource the resource represented as an associative array of the format
+     *
+     * @param bool $ignoreId a flag specifying whether the presence of the id attribute should be checked (should be true
+     *                       when checking before a call to createResource()
+     * @return array an array of the form array('code' => integer, 'detailCode' => integer) where the code is referring to
+     *                       one of the types of DB error. detail will hold the code of the dealer-county FK error if
+     *                       the name of the county does not match a known county in the database.
+     * @see RESTConstants.
+     */
     function verifyNr(?array $resource, bool $ignoreId = false): array
     {
         $res = array();
@@ -147,7 +158,17 @@ class TransporterModel extends AbstractModel
     }
 
 
-
+    /**
+     * Returns the collection of resources from the database.
+     * @param array $query an optional set of conditions that the retrieved
+     *              resources need to meet - e.g., array('counties' => array('...', ...)) would
+     *              mean that only resources having make = Ford would be returned.
+     * @return array an array of associative arrays of resource attributes. The
+     *               array will be empty if there are no resources to be returned.
+     * @throws BadRequestException in the case the request from the client is badly formatted or violates application
+     *         or database constraints.
+     * @throws BadRequestException
+     */
     function getShipments(?array $query = null): array
     {
 
