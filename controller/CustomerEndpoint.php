@@ -24,7 +24,7 @@ class CustomerEndpoint extends ResourceController {
             return $this->handleCollectionRequest($endpointPath, $requestMethod, $queries, $payload);
         } elseif (count($uri) > 1) {
             if (!ctype_digit($uri[0])) {
-                //TODO: Throw error for not providing customer ID
+                throw new BadRequestException(RESTConstants::HTTP_BAD_REQUEST, "Missing customer id");
             } else {
                 switch ($uri[1]) {
                     case ctype_digit($uri[1]):
@@ -41,7 +41,7 @@ class CustomerEndpoint extends ResourceController {
                 }
             }
         } else {
-            // TODO: ERROR HANDLING
+            throw new BadRequestException(RESTConstants::HTTP_BAD_REQUEST, "No such endpoint as requested");
         }
     }
 

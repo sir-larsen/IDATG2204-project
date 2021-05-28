@@ -1,0 +1,16 @@
+actor: ApiTester
+modules:
+    enabled:
+        - \Helper\Api
+        - Asserts
+        - REST:
+            url: http://127.0.0.1/idatg2204-project/
+            depends: PhpBrowser
+            part: Json
+        - Db:
+            dsn: 'mysql:host=127.0.0.1;dbname=project'
+            user: 'root'
+            password: ''
+            dump: 'tests/_data/testdb.sql'
+            populate: true # run populator before all tests
+            cleanup: true # run populator before each test
