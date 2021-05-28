@@ -8,10 +8,9 @@ modules:
         - Asserts
         - \Helper\Unit
         - Db:
-              dsn: 'msql:host=localhost;dbname=testdb'
-              user: 'user'
-              password: 'test'
+              dsn: 'mysql:host=localhost;dbname=project'
+              user: 'root'
+              password: ''
               dump: 'tests/_data/testdb.sql'
               populate: true # run populator before all tests
               cleanup: true # run populator before each test
-    step_decorators: ~        
