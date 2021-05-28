@@ -120,23 +120,42 @@ class CustomerModel extends AbstractModel {
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':state_id', $_POST['state_id']);
         $stmt->bindValue(':parent_id', $_POST['parent_id']);
-        $stmt->bindValue(':total_price', $_POST['total_price']);
+        $totalCost = $this->totalCost($_POST['model'], $_POST['quantity']);
+        $stmt->bindValue(':total_price',$totalCost);
         $stmt->bindValue(':customer_id', $_POST['customer_id']);
         $stmt->bindValue(':customer_rep', $_POST['customer_rep']);
         $stmt->execute();
 
+        $id = intval($this->db->lastInsertId());
+
         $res['status'] = RESTConstants::HTTP_OK;
         $res['result'] = array();
-        $res['result']['id'] = intval($this->db->lastInsertId());
+        $res['result']['id'] = $id;
         $res['result']['state_id'] = $_POST['state_id'];
         $res['result']['parent_id'] = $_POST['parent_id'];
-        $res['result']['total_price'] = $_POST['total_price'];
+        $res['result']['total_price'] = $totalCost;
         $res['result']['customer_id'] = $_POST['customer_id'];
         $res['result']['customer_rep'] = $_POST['customer_rep'];
         $this->db->commit();
 
-        return $res;
+        $this->placeOrderDetails($id);
 
+        return $res;
+    }
+
+    function placeOrderDetails(string $id) {
+
+        $this->db->beginTransaction();
+
+        $query = 'INSERT INTO order_details (order_nr, model, quantity) VALUES (:order_nr, :model, :quantity)';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':order_nr', $id);
+        $stmt->bindValue(':model', $_POST['model']);
+        $stmt->bindValue(':quantity', $_POST['quantity']);
+        $stmt->execute();
+
+        $this->db->commit();
     }
 
     function cancelOrder(string $order): ?array {
@@ -165,6 +184,21 @@ class CustomerModel extends AbstractModel {
         return $res;
     }
 
+    function totalCost(string $model, string $quantity): string {
+
+
+        $query = "SELECT ski.msrpp FROM ski WHERE ski.model_id = '" . $model . "'";
+
+        $stmt = $this->db->query($query);
+
+        $modelPrice = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $res = (int)$modelPrice['msrpp'] * (int)$quantity;
+
+
+        return (string)$res;
+    }
+
     function verifyOrderID(string $order): array {
 
         $res = array();
@@ -181,6 +215,7 @@ class CustomerModel extends AbstractModel {
     }
 
     function verifyPayload(array $payload, bool $ignoreId = false): array {
+        print "In verifyPayload";
 
         $res = array();
 
@@ -190,8 +225,8 @@ class CustomerModel extends AbstractModel {
         }
 
         if (!array_key_exists('state_id', $payload) && !array_key_exists('parent_id', $payload)
-            && !array_key_exists('total_price', $payload) && !array_key_exists('customer_id', $payload)
-            && !array_key_exists('customer_rep', $payload)) {
+            && !array_key_exists('customer_id', $payload) && !array_key_exists('customer_rep', $payload)
+            && !array_key_exists('model', $payload) && !array_key_exists('quantity', $payload)) {
             $res['code'] = RESTConstants::DB_ERR_ATTRIBUTE_MISSING;
             return $res;
         }
@@ -219,6 +254,12 @@ class CustomerModel extends AbstractModel {
         }
 
         if (!$this->isCustomerRepExisting($payload['customer_rep'])) {
+            $res['code'] = RESTConstants::DB_ERR_FK_INTEGRITY;
+            $res['detailCode'] = RESTConstants::DB_FK_CUSTOMER;
+            return $res;
+        }
+
+        if (!$this->isModelExisting($payload['model'])) {
             $res['code'] = RESTConstants::DB_ERR_FK_INTEGRITY;
             $res['detailCode'] = RESTConstants::DB_FK_CUSTOMER;
             return $res;
@@ -280,6 +321,21 @@ class CustomerModel extends AbstractModel {
         $query = 'SELECT COUNT(*) FROM employee WHERE nr = :nr';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':nr', $nr);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_NUM);
+        if ($row[0] == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function isModelExisting(string $model): bool {
+
+        $query = 'SELECT COUNT(*) FROM ski_model WHERE model_id = :model';
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':model', $model);
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_NUM);
